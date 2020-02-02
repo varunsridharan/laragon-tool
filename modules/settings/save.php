@@ -2,7 +2,7 @@
 
 namespace VSP\Laragon\Modules\Settings;
 
-use VSP\Laragon\Modules\Alerts;
+use VSP\Laragon\Modules\Alert_Handler;
 
 if ( ! class_exists( '\VSP\Laragon\Modules\Settings\Save' ) ) {
 	/**
@@ -12,7 +12,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Settings\Save' ) ) {
 	 * @author Varun Sridharan <varunsridharan23@gmail.com>
 	 */
 	class Save {
-		use Alerts;
+		use Alert_Handler;
 
 		/**
 		 * Save constructor.

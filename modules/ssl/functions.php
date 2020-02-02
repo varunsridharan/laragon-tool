@@ -7,7 +7,7 @@ define( 'MKCERT_PATH_DEFAULT', ABSPATH . '/library/mkcert.exe' );
  * @return mixed|string
  */
 function mk_cert_path() {
-	$path = get_option( 'LIBRARY/mkcert_path', 'default' );
+	$path = get_option( 'library/mkcert_path', 'default' );
 	return ( 'default' !== $path ) ? $path : MKCERT_PATH_DEFAULT;
 }
 
