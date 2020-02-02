@@ -51,7 +51,10 @@ function array_key_get( $keys, $array_or_object, $default = null, $delimiter = '
 	if ( isset( $keys[0] ) ) {
 		return ( $is_object ) ? array_key_get( $keys, $array_or_object->{$key_or_property}, $default ) : array_key_get( $keys, $array_or_object[ $key_or_property ], $default );
 	} else {
-		return ( $is_object ) ? $array_or_object->{$key_or_property} : $array_or_object[ $key_or_property ];
+		if ( $is_object ) {
+			return ( isset( $array_or_object->{$key_or_property} ) ) ? $array_or_object->{$key_or_property} : $default;
+		}
+		return ( isset( $array_or_object[ $key_or_property ] ) ) ? $array_or_object[ $key_or_property ] : $default;
 	}
 }
 
