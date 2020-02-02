@@ -6,7 +6,9 @@ require ABSPATH . '/functions.php';
 
 fetch_settings();
 
-template( 'header' );
+if ( ! isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) || isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest' ) {
+	template( 'header' );
+}
 
 glob_include( ABSPATH . '/modules/*.php' );
 glob_include( ABSPATH . '/modules/*/*.php' );

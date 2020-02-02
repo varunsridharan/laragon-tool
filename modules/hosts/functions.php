@@ -9,7 +9,7 @@ function is_hosts_file_readable() {
 }
 
 function is_hosts_file_writeable() {
-	return is_readable( hosts_file_path() );
+	return is_writable( hosts_file_path() );
 }
 
 function hosts_file_checks() {
