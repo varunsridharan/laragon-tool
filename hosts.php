@@ -3,7 +3,17 @@ require __DIR__ . '/config.php';
 
 echo hosts_file_checks();
 if ( is_hosts_file_readable() ) {
-	$instance = new \VSP\Laragon\Modules\Hosts\Parse();
+	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
+
+	var_dump( $instance->add( array(
+		'is_disabled' => true,
+		'ip'          => '127.0.0.1',
+		'domain'      => array( 'svarun.in', 'sva.run' ),
+		'comment'     => 'Personal Comment',
+		'by_tool'     => true,
+	) ) );
+
+	$instance->save();
 
 	?>
 	<table class="table table-striped">
@@ -31,7 +41,7 @@ if ( is_hosts_file_readable() ) {
 				</td>
 				<td><?php echo $host['ip']; ?></td>
 				<td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
-				<td><?php echo $host['comment']; ?></td>
+				<td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
 				<td> Edit / Delete</td>
 			</tr>
 			<?php
