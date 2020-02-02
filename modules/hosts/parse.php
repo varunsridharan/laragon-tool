@@ -67,11 +67,6 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		 * @return string
 		 */
 		private function host_record_id( $array ) {
-			/*if ( in_array( 'wcpss.pc', $array['domain'] ) ) {
-				var_dump( $array );
-				var_dump( md5( serialize( $array ) ) );
-				var_dump( 1 );
-			}*/
 			return ( is_array( $array ) ) ? md5( serialize( $array ) ) : '';
 		}
 
@@ -109,14 +104,14 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		 * @return bool
 		 */
 		public function add( $data ) {
-			/*$defaults = array(
+			$defaults = array(
 				'is_disabled' => false,
 				'ip'          => '127.0.0.1',
 				'domain'      => array(),
 				'comment'     => null,
 				'by_tool'     => false,
-			);*/
-			#$data     = array_merge( $defaults, $data );
+			);
+			$data     = array_merge( $defaults, $data );
 
 			if ( ! is_array( $data['domain'] ) ) {
 				$data['domain'] = array_filter( explode( ' ', $data['domain'] ) );
@@ -200,6 +195,21 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 				$this->hosts[ $new_id ] = $this->hosts[ $id ];
 				unset( $this->hosts[ $id ] );
 				return $new_id;
+			}
+			return true;
+		}
+
+		/**
+		 * Removes A Host.
+		 *
+		 * @param $host_id
+		 *
+		 * @return bool
+		 */
+		public function remove_host( $host_id ) {
+			if ( $this->hosts_exists( $host_id ) ) {
+				unset( $this->hosts[ $host_id ] );
+				$this->save();
 			}
 			return true;
 		}

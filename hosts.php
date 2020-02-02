@@ -12,8 +12,13 @@ if ( isset( $_POST['action'] ) ) {
 			$instance->save();
 			echo json_encode( array( 'host_id' => $new_id ) );
 		}
-		exit;
 	}
+
+	if ( 'delete' === $_POST['action'] && isset( $_POST['host_id'] ) ) {
+		$status = $instance->remove_host( $_POST['host_id'] );
+		echo json_encode( array( 'status' => $status ) );
+	}
+	exit;
 }
 
 echo hosts_file_checks();
@@ -47,7 +52,12 @@ if ( is_hosts_file_readable() ) {
 				<td><?php echo $host['ip']; ?></td>
 				<td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
 				<td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
-				<td> Edit / Delete</td>
+				<td>
+					<button type="button" class="btn btn-primary host-edit btn-sm">Edit</button>
+					|
+					<button type="button" class="btn btn-danger host-delete btn-sm" id="<?php echo $id; ?>">Delete
+					</button>
+				</td>
 			</tr>
 			<?php
 		}
@@ -64,6 +74,8 @@ template( 'footer' );
 <script>
 	$( function() {
 		var allcheckbox = $( 'input[type=checkbox]' );
+		var hostdelete  = $( 'button.host-delete' );
+
 		allcheckbox.on( 'click', function() {
 			var btn = $( this );
 			allcheckbox.attr( 'disabled', 'disabled' );
@@ -83,6 +95,28 @@ template( 'footer' );
 				}
 			} ).always( function() {
 				allcheckbox.removeAttr( 'disabled' );
+			} );
+		} );
+
+		hostdelete.on( 'click', function() {
+			var btn = $( this );
+			hostdelete.attr( 'disabled', 'disabled' );
+			jQuery.ajax( {
+				url: location.href,
+				method: 'POST',
+				data: {
+					action: "delete",
+					host_id: $( this ).attr( 'id' )
+				}
+			} ).done( function( res ) {
+				var host = JSON.parse( res );
+				if( typeof host.status !== 'undefined' ) {
+					if( true === host.status ) {
+						btn.parent().parent().remove();
+					}
+				}
+			} ).always( function() {
+				hostdelete.removeAttr( 'disabled' );
 			} );
 		} );
 	} )
