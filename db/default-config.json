@@ -1,0 +1,28 @@
+{
+  "ROOT"                 : "E:\\localhost/",
+  "DOCUMENT_ROOT"        : "www/",
+  "VHOST_FILE_PREFIX"    : "auto-",
+  "AUTO_ADD_HOSTS_ENTRY" : true,
+  "PLATFORM"             : "windows",
+  "LIBRARY"              : {
+	"mkcert_path" : "default"
+  },
+  "APACHE"               : {
+	"PATH"          : "etc/apache2/",
+	"SITES_ENABLED" : "sites-enabled/",
+	"ALIAS"         : "alias/",
+	"PORTS"         : {
+	  "HTTP"  : 80,
+	  "HTTPS" : 443
+	}
+  },
+  "NGINX"                : {
+	"PATH"          : "etc/nginx/",
+	"SITES_ENABLED" : "sites-enabled/",
+	"ALIAS"         : "alias/",
+	"PORTS"         : {
+	  "HTTP"  : 81,
+	  "HTTPS" : 444
+	}
+  }
+}
