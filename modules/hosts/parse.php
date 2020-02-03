@@ -80,17 +80,22 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 			preg_match_all( $re, $contents, $matches, PREG_SET_ORDER, 0 );
 			if ( ! empty( $matches ) ) {
 				foreach ( $matches as $host ) {
-					$is_disabled                                    = ( isset( $host[1] ) && ! empty( $host[1] ) && '#' === trim( $host[1] ) ) ? true : false;
-					$ip                                             = ( isset( $host[2] ) ) ? $host[2] : null;
-					$domain                                         = ( isset( $host[3] ) ) ? $host[3] : null;
-					$comment                                        = ( isset( $host[4] ) ) ? $host[4] : null;
-					$array                                          = array(
+					$is_disabled = ( isset( $host[1] ) && ! empty( $host[1] ) && '#' === trim( $host[1] ) ) ? true : false;
+					$ip          = ( isset( $host[2] ) ) ? $host[2] : null;
+					$domain      = ( isset( $host[3] ) ) ? $host[3] : null;
+					$comment     = ( isset( $host[4] ) ) ? $host[4] : null;
+					$array       = array(
 						'is_disabled' => $is_disabled,
-						'ip'          => $ip,
+						'ip'          => trim( $ip ),
 						'domain'      => explode( ' ', trim( $domain ) ),
-						'comment'     => $comment,
+						'comment'     => trim( ltrim( $comment, '#' ) ),
 						'by_tool'     => false,
 					);
+
+					if ( false !== strpos( $array['comment'], '[Laragon-Tookit]' ) ) {
+						$array['by_tool'] = true;
+					}
+
 					$this->hosts[ $this->host_record_id( $array ) ] = $array;
 				}
 			}
@@ -118,6 +123,10 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 			}
 
 			$data['ip'] = ( ! empty( $data['ip'] ) ) ? $data['ip'] : '127.0.0.1';
+
+			if ( isset( $data['by_tool'] ) && true === $data['by_tool'] ) {
+				$data['comment'] = '[Laragon-Tookit] ' . trim( $data['comment'] );
+			}
 
 			if ( ! empty( $data['domain'] ) ) {
 				$this->hosts[ $this->host_record_id( $data ) ] = $data;

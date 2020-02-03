@@ -4,11 +4,9 @@ $alert = new \VSP\Laragon\Modules\Alert();
 if ( isset( $_POST['action'] ) ) {
 	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
 	if ( 'update-status' === $_POST['action'] && isset( $_POST['host_id'] ) && isset( $_POST['status'] ) ) {
-		$new_id = $instance->update_hosts_data(
-			$_POST['host_id'], array(
-				                 'is_disabled' => ( 'false' === $_POST['status'] ),
-			                 )
-		);
+		$new_id = $instance->update_hosts_data( $_POST['host_id'], array(
+			'is_disabled' => ( 'false' === $_POST['status'] ),
+		) );
 
 		if ( false !== $new_id ) {
 			$instance->save();
@@ -42,12 +40,12 @@ if ( isset( $_POST['addnewhost'] ) ) {
 		$comments = $_POST['comments'];
 		$status   = ( isset( $_POST['new_hosts_status'] ) ) ? true : false;
 		$is_added = $instance->add( array(
-				'is_disabled' => ( false === $status ) ? true : false,
-				'ip'          => $host_ip,
-				'domain'      => explode( ',', $domain ),
-				'comment'     => $comments,
-				'by_tool'     => true,
-			)		);
+			'is_disabled' => ( false === $status ) ? true : false,
+			'ip'          => $host_ip,
+			'domain'      => explode( ',', $domain ),
+			'comment'     => trim( $comments ),
+			'by_tool'     => true,
+		) );
 		if ( $is_added ) {
 			$alert->success( 'Host Entry Added.' );
 			$instance->save();
@@ -62,46 +60,46 @@ template( 'add-new-hosts' );
 if ( is_hosts_file_readable() ) {
 	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
 	?>
-    <div class="col-xs-12 mb-4 text-right">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_new_hosts">Add (+)</button>
-    </div>
+	<div class="col-xs-12 mb-4 text-right">
+		<button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_new_hosts">Add (+)</button>
+	</div>
 
-    <table id="hostslisting" class="table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col" style="width:50px;">Status</th>
-            <th scope="col">Host</th>
-            <th scope="col">Domains</th>
-            <th scope="col">Comments</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
+	<table id="hostslisting" class="table table-striped">
+		<thead class="thead-dark">
+		<tr>
+			<th scope="col" style="width:50px;">Status</th>
+			<th scope="col">Host</th>
+			<th scope="col">Domains</th>
+			<th scope="col">Comments</th>
+			<th scope="col">Action</th>
+		</tr>
+		</thead>
+		<tbody>
 		<?php
 		foreach ( $instance->get_list() as $id => $host ) {
 			$is_enabled = ( true === $host['is_disabled'] ) ? false : true;
 			$enh        = ( true === $is_enabled ) ? 'checked' : '';
 			?>
-            <tr>
-                <td>
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="<?php echo $id; ?>" <?php echo $enh; ?>>
-                        <label class="custom-control-label" for="<?php echo $id; ?>"></label>
-                    </div>
-                </td>
-                <td><?php echo $host['ip']; ?></td>
-                <td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
-                <td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
-                <td>
-                    <button type="button" class="btn btn-danger host-delete btn-sm" id="<?php echo $id; ?>">Delete
-                    </button>
-                </td>
-            </tr>
+			<tr>
+				<td>
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" id="<?php echo $id; ?>" <?php echo $enh; ?>>
+						<label class="custom-control-label" for="<?php echo $id; ?>"></label>
+					</div>
+				</td>
+				<td><?php echo $host['ip']; ?></td>
+				<td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
+				<td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
+				<td>
+					<button type="button" class="btn btn-danger host-delete btn-sm" id="<?php echo $id; ?>">Delete
+					</button>
+				</td>
+			</tr>
 			<?php
 		}
 		?>
-        </tbody>
-    </table>
+		</tbody>
+	</table>
 
 	<?php
 }
