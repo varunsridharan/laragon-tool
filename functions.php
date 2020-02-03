@@ -95,6 +95,7 @@ function template( $type ) {
 		'footer'     => ABSPATH . '/parts/footer.php',
 		'menu'       => ABSPATH . '/parts/menu.php',
 		'breadcrumb' => ABSPATH . '/parts/breadcrumb.php',
+		'add-new-hosts' => ABSPATH . '/parts/add-new-hosts.php',
 	);
 
 	if ( isset( $files[ $type ] ) ) {

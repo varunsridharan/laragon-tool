@@ -1,12 +1,14 @@
 <?php
 require __DIR__ . '/config.php';
-
+$alert = new \VSP\Laragon\Modules\Alert();
 if ( isset( $_POST['action'] ) ) {
 	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
 	if ( 'update-status' === $_POST['action'] && isset( $_POST['host_id'] ) && isset( $_POST['status'] ) ) {
-		$new_id = $instance->update_hosts_data( $_POST['host_id'], array(
-			'is_disabled' => ( 'false' === $_POST['status'] ),
-		) );
+		$new_id = $instance->update_hosts_data(
+			$_POST['host_id'], array(
+				                 'is_disabled' => ( 'false' === $_POST['status'] ),
+			                 )
+		);
 
 		if ( false !== $new_id ) {
 			$instance->save();
@@ -21,104 +23,88 @@ if ( isset( $_POST['action'] ) ) {
 	exit;
 }
 
+if ( isset( $_POST['addnewhost'] ) ) {
+	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
+	$issue    = false;
+
+	if ( ! isset( $_POST['host_ip'] ) || isset( $_POST['host_ip'] ) && empty( $_POST['host_ip'] ) ) {
+		$alert->danger( 'Host IP Required.' );
+		$issue = true;
+	}
+	if ( ! isset( $_POST['domains'] ) || isset( $_POST['domains'] ) && empty( $_POST['domains'] ) ) {
+		$alert->danger( 'Domains Required.' );
+		$issue = true;
+	}
+
+	if ( false === $issue ) {
+		$domain   = $_POST['domains'];
+		$host_ip  = $_POST['host_ip'];
+		$comments = $_POST['comments'];
+		$status   = ( isset( $_POST['new_hosts_status'] ) ) ? true : false;
+		$is_added = $instance->add( array(
+				'is_disabled' => ( false === $status ) ? true : false,
+				'ip'          => $host_ip,
+				'domain'      => explode( ',', $domain ),
+				'comment'     => $comments,
+				'by_tool'     => true,
+			)		);
+		if ( $is_added ) {
+			$alert->success( 'Host Entry Added.' );
+			$instance->save();
+		}
+	}
+}
+
+echo $alert->alerts();
 echo hosts_file_checks();
+template( 'add-new-hosts' );
 
 if ( is_hosts_file_readable() ) {
 	$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
 	?>
-	<table id="hostslisting" class="table table-striped">
-		<thead class="thead-dark">
-		<tr>
-			<th scope="col" style="width:50px;">Status</th>
-			<th scope="col">Host</th>
-			<th scope="col">Domains</th>
-			<th scope="col">Comments</th>
-			<th scope="col">Action</th>
-		</tr>
-		</thead>
-		<tbody>
+    <div class="col-xs-12 mb-4 text-right">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_new_hosts">Add (+)</button>
+    </div>
+
+    <table id="hostslisting" class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col" style="width:50px;">Status</th>
+            <th scope="col">Host</th>
+            <th scope="col">Domains</th>
+            <th scope="col">Comments</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
 		<?php
 		foreach ( $instance->get_list() as $id => $host ) {
 			$is_enabled = ( true === $host['is_disabled'] ) ? false : true;
 			$enh        = ( true === $is_enabled ) ? 'checked' : '';
 			?>
-			<tr>
-				<td>
-					<div class="custom-control custom-switch">
-						<input type="checkbox" class="custom-control-input" id="<?php echo $id; ?>" <?php echo $enh; ?>>
-						<label class="custom-control-label" for="<?php echo $id; ?>"></label>
-					</div>
-				</td>
-				<td><?php echo $host['ip']; ?></td>
-				<td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
-				<td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
-				<td>
-					<button type="button" class="btn btn-primary host-edit btn-sm">Edit</button>
-					|
-					<button type="button" class="btn btn-danger host-delete btn-sm" id="<?php echo $id; ?>">Delete
-					</button>
-				</td>
-			</tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="<?php echo $id; ?>" <?php echo $enh; ?>>
+                        <label class="custom-control-label" for="<?php echo $id; ?>"></label>
+                    </div>
+                </td>
+                <td><?php echo $host['ip']; ?></td>
+                <td><?php echo implode( '<br/>', $host['domain'] ); ?></td>
+                <td><?php echo trim( ltrim( $host['comment'], '#' ) ); ?></td>
+                <td>
+                    <button type="button" class="btn btn-danger host-delete btn-sm" id="<?php echo $id; ?>">Delete
+                    </button>
+                </td>
+            </tr>
 			<?php
 		}
 		?>
-		</tbody>
-	</table>
+        </tbody>
+    </table>
 
 	<?php
 }
 
 template( 'footer' );
 ?>
-
-<script>
-	$( function() {
-		var allcheckbox = $( 'input[type=checkbox]' );
-		var hostdelete  = $( 'button.host-delete' );
-
-		allcheckbox.on( 'click', function() {
-			var btn = $( this );
-			allcheckbox.attr( 'disabled', 'disabled' );
-			jQuery.ajax( {
-				url: location.href,
-				method: 'POST',
-				data: {
-					host_id: $( this ).attr( 'id' ),
-					action: "update-status",
-					status: $( this ).prop( 'checked' ),
-				}
-			} ).done( function( res ) {
-				var host = JSON.parse( res );
-				if( typeof host.host_id !== 'undefined' ) {
-					btn.attr( 'id', host.host_id );
-					btn.parent().find( 'label' ).attr( 'for', host.host_id );
-				}
-			} ).always( function() {
-				allcheckbox.removeAttr( 'disabled' );
-			} );
-		} );
-
-		hostdelete.on( 'click', function() {
-			var btn = $( this );
-			hostdelete.attr( 'disabled', 'disabled' );
-			jQuery.ajax( {
-				url: location.href,
-				method: 'POST',
-				data: {
-					action: "delete",
-					host_id: $( this ).attr( 'id' )
-				}
-			} ).done( function( res ) {
-				var host = JSON.parse( res );
-				if( typeof host.status !== 'undefined' ) {
-					if( true === host.status ) {
-						btn.parent().parent().remove();
-					}
-				}
-			} ).always( function() {
-				hostdelete.removeAttr( 'disabled' );
-			} );
-		} );
-	} )
-
-</script>
