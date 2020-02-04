@@ -28,6 +28,10 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Config_Base' ) ) {
 					'http'  => false,
 					'https' => false,
 				),
+				'ssl'           => array(
+					'key'  => false,
+					'cert' => false,
+				),
 				'error_log'     => false,
 				'domains'       => false,
 			);

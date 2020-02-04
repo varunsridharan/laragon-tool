@@ -62,33 +62,61 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 
 			if ( ! empty( $data['document_root'] ) && ! empty( $data['vhostdomains'] ) ) {
 				$this->host_id = md5( $data['document_root'] );
-				#if ( ! file_exists( $this->host_db_file_path() ) ) {
-				$this->data = $data;
-				$status     = $this->create_root();
-				if ( $status ) {
-					$this->handle_domains();
-					$this->add_hosts_entry();
+				if ( ! file_exists( $this->host_db_file_path() ) ) {
+					$this->data = $data;
+					$status     = $this->create_root();
+					if ( $status ) {
+						$this->handle_domains();
+						$this->add_hosts_entry();
 
-					new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
-						'document_root' => $this->data['document_root'],
-						'host_id'       => $this->host_id,
-						'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-					), $this->data['apache'] ) );
+						$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id, array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ) );
+						if ( ! $ssl->generate_ssl() ) {
+							$cachef1 = $ssl->key_file( true );
+							$cachef2 = $ssl->key_file();
+							$cachef3 = $ssl->cert_file( true );
+							$cachef4 = $ssl->cert_file();
+							$html    = <<<HTML
+Unable To Generate SSL / Move Generated SSL From Cache <br/>
+1. Copy File From : <code>$cachef1</code>  <br/> To <code>$cachef2</code> <br/><br/>
+2. Copy File From : <code>$cachef3</code> <br/> To <code>$cachef4</code>
+HTML;
+							$this->warning( $html );
+						}
 
-					new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
-						'document_root' => $this->data['document_root'],
-						'host_id'       => $this->host_id,
-						'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-					), $this->data['nginx'] ) );
+						$this->data['ssl'] = array(
+							'key'  => $ssl->key_file(),
+							'cert' => $ssl->cert_file(),
+						);
 
-					$this->save_db();
-					$this->reload_laragon();
+						new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
+							'document_root' => $this->data['document_root'],
+							'host_id'       => $this->host_id,
+							'ssl'           => array(
+								'key'  => $ssl->key_file(),
+								'cert' => $ssl->cert_file(),
+							),
+							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
+						), $this->data['apache'] ) );
+
+						new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
+							'document_root' => $this->data['document_root'],
+							'host_id'       => $this->host_id,
+							'ssl'           => array(
+								'key'  => $ssl->key_file(),
+								'cert' => $ssl->cert_file(),
+							),
+							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
+						), $this->data['nginx'] ) );
+
+						$this->save_db();
+						$this->success( 'VHost Created. Reload Laragon And Start Using it.' );
+						#$this->reload_laragon();
+					} else {
+						$this->danger( 'Unable to create <code>document root</code>. Unable To Create VHost' );
+					}
 				} else {
-					$this->danger( 'Unable to create <code>document root</code>. Unable To Create VHost' );
+					$this->danger( 'VHost Already Exists. edit existing vhost to add more domains.' );
 				}
-				#} else {
-				#	$this->danger( 'VHost Already Exists. edit existing vhost to add more domains.' );
-				#}
 			}
 		}
 
@@ -171,7 +199,9 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 		}
 
 		public function reload_laragon() {
-			var_dump( exec(laragon_install_path() . 'laragon reload') );
+			var_dump( microtime() );
+			var_dump( system( laragon_install_path() . 'laragon reload' ) );
+			var_dump( microtime() );
 		}
 	}
 }

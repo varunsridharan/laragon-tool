@@ -168,6 +168,10 @@ function laragon_toolkit_paths( $type ) {
 			$path   = get_option( 'library/mkcert_path', '${LARAGON_TOOLKIT_PATH}/library/mkcert.exe' );
 			$return = unslashit( str_replace( '${LARAGON_TOOLKIT_PATH}', ABSPATH, $path ) );
 			break;
+
+		case 'ssl_storage':
+			$return = slashit( str_replace( '${LARAGON_PATH}', laragon_install_path(), get_option( 'ssl_storage_path' ) ) );
+			break;
 		case 'apache/config':
 		case 'nginx/config':
 			$return = slashit( str_replace( '${LARAGON_PATH}', laragon_install_path(), get_option( $type ) ) );
@@ -291,4 +295,13 @@ function apache_port( $https = false ) {
  */
 function nginx_port( $https = false ) {
 	return ( $https ) ? get_option( 'nginx/ports/https' ) : get_option( 'nginx/ports/http' );
+}
+
+/**
+ * Returns Production Storage Path.
+ *
+ * @return string
+ */
+function ssl_storage() {
+	return laragon_toolkit_paths( 'ssl_storage' );
 }

@@ -35,6 +35,8 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Apache' ) ) {
 			$https_access_log = $this->data['access_log']['https'];
 			$http_port        = apache_port();
 			$https_port       = apache_port( true );
+			$ssl_key          = $this->data['ssl']['key'];
+			$ssl_cert         = $this->data['ssl']['cert'];
 
 			$ServerAlias = array();
 			if ( ! empty( $this->data['domains'] ) ) {
@@ -54,8 +56,8 @@ define MAIN_DOMAIN "$main_domain"
 define ERROR_LOG "$error_log"
 define HTTP_ACCESS_LOG "$http_access_log"
 define HTTPS_ACCESS_LOG "$https_access_log"
-define SSL_CERT ""
-define SSL_KEY ""
+define SSL_CERT "$ssl_cert"
+define SSL_KEY "$ssl_key"
 
 <VirtualHost *:$http_port>
 	DocumentRoot "\${DOC_ROOT}"
@@ -88,9 +90,9 @@ $ServerAlias
         Require all granted
     </Directory>
 
-    #SSLEngine on
-    #SSLCertificateFile      \${SSL_CERT}
-    #SSLCertificateKeyFile   \${SSL_KEY}
+    SSLEngine on
+    SSLCertificateFile      \${SSL_CERT}
+    SSLCertificateKeyFile   \${SSL_KEY}
 </VirtualHost>
 config;
 			return $config;
