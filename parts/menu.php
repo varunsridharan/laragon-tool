@@ -9,7 +9,7 @@
 		<ul class="navbar-nav">
 
 			<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-
+			<li class="nav-item"><a class="nav-link" href="vhost.php">Virtual Host</a></li>
 			<li class="nav-item"><a class="nav-link" href="hosts.php">Hosts</a></li>
 
 			<li class="nav-item dropdown">

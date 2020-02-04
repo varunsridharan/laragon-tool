@@ -1,7 +1,8 @@
 {
   "laragon_path"     : "E:\\localhost",
   "document_root"    : "${LARAGON_PATH}\/www",
-  "host_file_prefix" : "windows",
+  "host_file_prefix" : "${LARAGON_PATH}\/etc\/ssl",
+  "ssl_storage_path" : "",
   "platform"         : "windows",
   "hosts_file_entry" : "on",
   "hosts_file"       : "C:\\Windows\\System32\\drivers\\etc\\hosts",

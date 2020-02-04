@@ -147,10 +147,20 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 				$by_general = array();
 
 				foreach ( $this->get_list() as $host ) {
-					$content = ( true === $host['is_disabled'] ) ? '# ' : '';
+					$is_disabled = ( true === $host['is_disabled'] ) ? '# ' : '';
+					$ip          = $host['ip'];
+					$domain      = ( is_array( $host['domain'] ) ) ? implode( ' ', $host['domain'] ) : $host['domain'];
+					$comment     = '# ' . trim( ltrim( $host['comment'], '#' ) );
+
+					$content = <<<TEXT
+$is_disabled $ip $domain $comment
+TEXT;
+
+
+					/*$content = ( true === $host['is_disabled'] ) ? '# ' : '';
 					$content .= $host['ip'] . ' ';
 					$content .= ( is_array( $host['domain'] ) ) ? implode( ' ', $host['domain'] ) : $host['domain'];
-					$content .= ' # ' . trim( ltrim( $host['comment'], '#' ) );
+					$content .= ' # ' . trim( ltrim( $host['comment'], '#' ) );*/
 					if ( true === $host['by_tool'] ) {
 						$by_tool[] = trim( $content );
 					} else {

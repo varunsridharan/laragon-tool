@@ -1,16 +1,4 @@
 <?php
-define( 'MKCERT_PATH_DEFAULT', ABSPATH . '/library/mkcert.exe' );
-
-/**
- * Fetches & Returns MKCERT_PATH
- *
- * @return mixed|string
- */
-function mk_cert_path() {
-	$path = get_option( 'library/mkcert_path', 'default' );
-	return ( 'default' !== $path ) ? $path : MKCERT_PATH_DEFAULT;
-}
-
 /**
  * Installs MKCRT
  */

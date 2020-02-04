@@ -91,10 +91,10 @@ function get_option( $key, $default = null ) {
  */
 function template( $type ) {
 	$files = array(
-		'header'     => ABSPATH . '/parts/header.php',
-		'footer'     => ABSPATH . '/parts/footer.php',
-		'menu'       => ABSPATH . '/parts/menu.php',
-		'breadcrumb' => ABSPATH . '/parts/breadcrumb.php',
+		'header'        => ABSPATH . '/parts/header.php',
+		'footer'        => ABSPATH . '/parts/footer.php',
+		'menu'          => ABSPATH . '/parts/menu.php',
+		'breadcrumb'    => ABSPATH . '/parts/breadcrumb.php',
 		'add-new-hosts' => ABSPATH . '/parts/add-new-hosts.php',
 	);
 
@@ -115,6 +115,8 @@ function cache_setup() {
 
 	if ( ! file_exists( ABSPATH . '/cache/vhosts' ) ) {
 		@mkdir( ABSPATH . '/cache/vhosts' );
+		@mkdir( ABSPATH . '/cache/vhosts/apache' );
+		@mkdir( ABSPATH . '/cache/vhosts/nginx' );
 	}
 
 	if ( ! file_exists( ABSPATH . '/cache/ssl' ) ) {
@@ -124,4 +126,169 @@ function cache_setup() {
 	if ( ! file_exists( ABSPATH . '/cache/hosts' ) ) {
 		@mkdir( ABSPATH . '/cache/hosts' );
 	}
+}
+
+/**
+ * @param $str
+ *
+ * @return string
+ */
+function unslashit( $str ) {
+	return str_replace( '//', '/', rtrim( $str, '/' ) );
+}
+
+/**
+ * @param $str
+ *
+ * @return string
+ */
+function slashit( $str ) {
+	return str_replace( '//', '/', unslashit( $str ) . '/' );
+}
+
+/**
+ * Settings Config.
+ */
+
+/**
+ * @param $type
+ *
+ * @return string
+ */
+function laragon_toolkit_paths( $type ) {
+	$return = null;
+	switch ( $type ) {
+		case 'laragon_install_path':
+			$return = slashit( get_option( 'laragon_path' ) );
+			break;
+		case 'global_document_root':
+			$return = slashit( str_replace( '${LARAGON_PATH}', laragon_install_path(), get_option( 'document_root' ) ) );
+			break;
+		case 'mk_cert_path':
+			$path   = get_option( 'library/mkcert_path', '${LARAGON_TOOLKIT_PATH}/library/mkcert.exe' );
+			$return = unslashit( str_replace( '${LARAGON_TOOLKIT_PATH}', ABSPATH, $path ) );
+			break;
+		case 'apache/config':
+		case 'nginx/config':
+			$return = slashit( str_replace( '${LARAGON_PATH}', laragon_install_path(), get_option( $type ) ) );
+			break;
+		case 'apache/sites_enabled':
+		case 'apache/alias':
+		case 'nginx/sites_enabled':
+		case 'nginx/alias':
+			$return = slashit( str_replace( array(
+				'${LARAGON_PATH}',
+				'${APACHE_PATH}',
+				'${NGINX_PATH}',
+			), array(
+				laragon_install_path(),
+				apache_config(),
+				nginx_config(),
+			), get_option( $type ) ) );
+			break;
+	}
+	return $return;
+}
+
+/**
+ * Returns Laragon Install Path.
+ *
+ * @return string
+ */
+function laragon_install_path() {
+	return laragon_toolkit_paths( 'laragon_install_path' );
+}
+
+/**
+ * Returns Global Document Root.
+ *
+ * @return string
+ */
+function global_document_root() {
+	return laragon_toolkit_paths( 'global_document_root' );
+}
+
+/**
+ * Fetches & Returns MKCERT_PATH
+ *
+ * @return mixed|string
+ */
+function mk_cert_path() {
+	return laragon_toolkit_paths( 'mk_cert_path' );
+}
+
+/**
+ * Retuns Apache Config.
+ *
+ * @return string
+ */
+function apache_config() {
+	return laragon_toolkit_paths( 'apache/config' );
+}
+
+/**
+ * Retuns Apache Sites Config.
+ *
+ * @return string
+ */
+function apache_sites_config() {
+	return laragon_toolkit_paths( 'apache/sites_enabled' );
+}
+
+/**
+ * Retuns Apache Sites Config.
+ *
+ * @return string
+ */
+function apache_alias_config() {
+	return laragon_toolkit_paths( 'apache/alias' );
+}
+
+/**
+ * Retuns Nginx Config.
+ *
+ * @return string
+ */
+function nginx_config() {
+	return laragon_toolkit_paths( 'nginx/config' );
+}
+
+/**
+ * Retuns Nginx Sites Config.
+ *
+ * @return string
+ */
+function nginx_sites_config() {
+	return laragon_toolkit_paths( 'nginx/sites_enabled' );
+}
+
+/**
+ * Retuns nginx Sites Config.
+ *
+ * @return string
+ */
+function nginx_alias_config() {
+	return laragon_toolkit_paths( 'nginx/alias' );
+}
+
+/**
+ * Returns Apache Port.
+ *
+ * @param bool $https
+ *
+ * @return mixed
+ */
+function apache_port( $https = false ) {
+	return ( $https ) ? get_option( 'apache/ports/https' ) : get_option( 'apache/ports/http' );
+}
+
+/**
+ * Returns Nginx Port.
+ *
+ * @param bool $https
+ *
+ * @return mixed
+ */
+function nginx_port( $https = false ) {
+	return ( $https ) ? get_option( 'nginx/ports/https' ) : get_option( 'nginx/ports/http' );
 }

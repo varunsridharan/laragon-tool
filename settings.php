@@ -36,7 +36,8 @@ if ( isset( $_POST['update_settings'] ) ) {
 
 						<div class="form-row">
 							<div class="input-group col-md-12 mb-2">
-								<div class="input-group-prepend"><span class="input-group-text">Document Root</span>
+								<div class="input-group-prepend"><span
+											class="input-group-text">Global Document Root</span>
 								</div>
 								<input type="text" class="form-control" name="document_root"
 									   placeholder="${LARAGON_PATH}/www" required
@@ -54,6 +55,18 @@ if ( isset( $_POST['update_settings'] ) ) {
 								<input type="text" class="form-control" name="host_file_prefix" placeholder="auto-"
 									   required value="<?php echo get_option( 'host_file_prefix' ); ?>">
 							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend"><span class="input-group-text">SSL Storage Path</span>
+								</div>
+								<input type="text" class="form-control" name="ssl_storage_path"
+									   placeholder="${LARAGON_PATH}/etc/ssl" required
+									   value="<?php echo get_option( 'ssl_storage_path' ); ?>">
+							</div>
+							<small class="col-xs-12 form-text text-muted mb-3"> use <code>${LARAGON_PATH}</code> to get
+								install path</small>
 						</div>
 
 						<div class="form-row">
