@@ -88,4 +88,51 @@ $( function() {
 		$( this ).parent().parent().parent().remove();
 		x--;
 	} );
+
+	/**
+	 * V Host Lists.
+	 */
+
+	$( 'body' ).on( 'click', '.change-vhost-status', function() {
+		var $id     = $( this ).attr( 'data-hostid' ),
+			$type   = $( this ).attr( 'data-type' ),
+			$status = $( this ).prop( 'checked' );
+
+		var $data = {
+			action: "vhost-update-status",
+			id: $id,
+			type: $type,
+			status: $status,
+		};
+
+		jQuery.ajax( {
+			url: 'vhost-actions.php',
+			method: "POST",
+			data: {
+				action: "vhost-update-status",
+				id: $id,
+				type: $type,
+				status: $status,
+			},
+		} );
+		//$( '.change-vhost-status' ).attr( 'disabled', 'disabled' );
+	} );
+
+	$( 'body' ).on( 'click', '.restore-vhost-config', function( e ) {
+		e.preventDefault();
+		var status = window.confirm( 'Are you sure want to restore config ? \n\r' +
+			'any custom changes will be deleted' );
+		if( status ) {
+			location.href = $( this ).attr( 'href' );
+		}
+	} );
+	$( 'body' ).on( 'click', '.delete-vhost', function( e ) {
+		e.preventDefault();
+		var status = window.confirm( 'Are you sure want to delete Vhost ?' );
+		if( status ) {
+			location.href = $( this ).attr( 'href' );
+		}
+	} );
+
+	$( '[data-toggle="tooltip"]' ).tooltip();
 } );

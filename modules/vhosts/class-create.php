@@ -205,7 +205,7 @@ HTML;
 					'offline' => apache_sites_config() . 'offline/' . $this->host_id . '.conf',
 				),
 				'nginx'  => array(
-					'cache'   => ABSPATH . '/cache/vhosts/apache/' . $this->host_id . '.conf',
+					'cache'   => ABSPATH . '/cache/vhosts/nginx/' . $this->host_id . '.conf',
 					'live'    => nginx_sites_config() . $this->host_id . '.conf',
 					'offline' => nginx_sites_config() . 'offline/' . $this->host_id . '.conf',
 				),

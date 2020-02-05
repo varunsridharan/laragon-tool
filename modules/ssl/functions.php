@@ -4,7 +4,10 @@
  */
 function mk_cert_install() {
 	$cmd = mk_cert_path() . ' -install';
-	exec( $cmd );
+	/*var_dump( 'System' );
+	$exec_output = $exec_return = false;
+	var_dump( shell_exec( $cmd ) );
+	var_dump( $exec_output, $exec_return );*/
 }
 
 function mk_cert( $domains ) {
