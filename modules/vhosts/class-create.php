@@ -157,7 +157,6 @@ HTML;
 		 * Creates Domain Array.
 		 */
 		public function handle_domains() {
-			$this->data['vhostdomains'][] = 'abc.domain4.pc';
 			$base_domains                 = array();
 			$widlcard_domains             = array();
 

@@ -49,10 +49,10 @@ if ( isset( $_REQUEST['action'] ) ) {
 		$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( host_db_file( $host_id ) );
 		if ( $instance->is_readable() ) {
 			$instance->delete_vhost();
-			header( 'location:vhost.php?success=sslregen' );
+			header( 'location:vhost.php?success=delete' );
 			exit;
 		}
-		header( 'location:vhost.php?failed=sslregen' );
+		header( 'location:vhost.php?failed=delete' );
 		exit;
 	}
 }

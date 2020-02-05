@@ -16,6 +16,10 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 			case 'sslregen':
 				$instance->success( 'VHost SSL Certificate Regenerated Successfully. <strong>Please Restart Laragon</strong>' );
 				break;
+			case 'delete':
+				$instance->success( 'VHost Deleted Successfully. <strong>Please Restart Laragon</strong>' );
+				$instance->info( '<i>Document Root</i> , <i>Access Logs</i> & <i>Error Logs</i> are not deleted. you can remove them' );
+				break;
 		}
 	}
 
@@ -26,6 +30,9 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 				break;
 			case 'sslregen':
 				$instance->warning( 'Failed To Generate SSL.</strong>' );
+				break;
+			case 'delete':
+				$instance->success( 'Failed To Selected VHost' );
 				break;
 		}
 	}
