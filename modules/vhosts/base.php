@@ -16,6 +16,11 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Config_Base' ) ) {
 		protected $data;
 
 		/**
+		 * @var string
+		 */
+		protected $config_code;
+
+		/**
 		 * Config_Base constructor.
 		 *
 		 * @param $config
@@ -52,30 +57,31 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Config_Base' ) ) {
 			if ( ! file_exists( $this->data['access_log']['http'] ) ) {
 				mkdir( $this->data['access_log']['http'], 0777, true );
 				rmdir( $this->data['access_log']['http'] );
-				file_put_contents( $this->data['access_log']['http'], '' );
+				@file_put_contents( $this->data['access_log']['http'], '' );
 			}
 
 			if ( ! file_exists( $this->data['access_log']['https'] ) ) {
 				mkdir( $this->data['access_log']['https'], 0777, true );
 				rmdir( $this->data['access_log']['https'] );
-				file_put_contents( $this->data['access_log']['https'], '' );
+				@file_put_contents( $this->data['access_log']['https'], '' );
 			}
 
 			if ( ! file_exists( $this->data['error_log'] ) ) {
 				mkdir( $this->data['error_log'], 0777, true );
 				rmdir( $this->data['error_log'] );
-				file_put_contents( $this->data['error_log'], '' );
+				@file_put_contents( $this->data['error_log'], '' );
 			}
 		}
 
 		/**
-		 * Saves Cache.
+		 * Saves Cache Config.
 		 *
 		 * @param $type
-		 * @param $code
+		 *
+		 * @return bool
 		 */
-		protected function save_cache( $type, $code ) {
-			file_put_contents( ABSPATH . '/cache/vhosts/' . $type . '/' . $this->data['host_id'] . '.conf', $code );
+		protected function save_cache( $type ) {
+			return ( @file_put_contents( ABSPATH . '/cache/vhosts/' . $type . '/' . $this->data['host_id'] . '.conf', $this->config_code ) );
 		}
 	}
 }

@@ -18,8 +18,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Apache' ) ) {
 		public function __construct( $data ) {
 			parent::__construct( $data );
 			$this->create_logs();
-			$code = $this->generate_config_code();
-			$this->save_config( $code );
+			$this->config_code = $this->generate_config_code();
 		}
 
 		/**
@@ -102,10 +101,12 @@ config;
 		 * Saves Config.
 		 *
 		 * @param $code
+		 *
+		 * @return bool
 		 */
-		protected function save_config( $code ) {
-			$this->save_cache( 'apache', $code );
-			file_put_contents( slashit( apache_sites_config() ) . $this->data['host_id'] . '.conf', $code );
+		public function save_config() {
+			$this->save_cache( 'apache' );
+			return ( @file_put_contents( slashit( apache_sites_config() ) . $this->data['host_id'] . '.conf', $this->config_code ) );
 		}
 	}
 }

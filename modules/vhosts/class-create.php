@@ -88,7 +88,7 @@ HTML;
 							'cert' => $ssl->cert_file(),
 						);
 
-						new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
+						$instance = new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
 							'document_root' => $this->data['document_root'],
 							'host_id'       => $this->host_id,
 							'ssl'           => array(
@@ -97,8 +97,11 @@ HTML;
 							),
 							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
 						), $this->data['apache'] ) );
+						if ( ! $instance->save_config() ) {
+							$this->danger( 'Unable to create Apache config for this VHost' );
+						}
 
-						new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
+						$instance = new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
 							'document_root' => $this->data['document_root'],
 							'host_id'       => $this->host_id,
 							'ssl'           => array(
@@ -107,6 +110,9 @@ HTML;
 							),
 							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
 						), $this->data['nginx'] ) );
+						if ( ! $instance->save_config() ) {
+							$this->danger( 'Unable to create Nginx config for this VHost' );
+						}
 
 						$this->save_db();
 						$this->success( 'VHost Created. Reload Laragon And Start Using it.' );
@@ -190,9 +196,21 @@ HTML;
 		 * Creates VHosts data file.
 		 */
 		public function save_db() {
-			$data            = $this->data;
-			$data['host_id'] = $this->host_id;
-			$status          = file_put_contents( $this->host_db_file_path(), json_encode( $data ) );
+			$data                = $this->data;
+			$data['host_id']     = $this->host_id;
+			$data['host_config'] = array(
+				'apache' => array(
+					'cache'   => ABSPATH . '/cache/vhosts/apache/' . $this->host_id . '.conf',
+					'live'    => apache_sites_config() . $this->host_id . '.conf',
+					'offline' => apache_sites_config() . 'offline/' . $this->host_id . '.conf',
+				),
+				'nginx'  => array(
+					'cache'   => ABSPATH . '/cache/vhosts/apache/' . $this->host_id . '.conf',
+					'live'    => nginx_sites_config() . $this->host_id . '.conf',
+					'offline' => nginx_sites_config() . 'offline/' . $this->host_id . '.conf',
+				),
+			);
+			$status              = file_put_contents( $this->host_db_file_path(), json_encode( $data ) );
 			if ( false === $status ) {
 				$this->danger( 'Unable to create database file @ <code>' . $this->host_db_file_path() . '</code> with below content <div class="mt-3"><pre>' . json_encode( $data ) . '</pre></div>' );
 			}

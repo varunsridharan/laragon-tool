@@ -8,8 +8,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Nginx' ) ) {
 			parent::__construct( $data );
 			parent::__construct( $data );
 			$this->create_logs();
-			$code = $this->generate_config_code();
-			$this->save_config( $code );
+			$this->config_code = $this->generate_config_code();
 		}
 
 		/**
@@ -28,7 +27,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Nginx' ) ) {
 			$ssl_key          = $this->data['ssl']['key'];
 			$ssl_cert         = $this->data['ssl']['cert'];
 			$main_domain      .= ' ' . implode( ' ', $this->data['domains'] );
-			var_dump( $this->data );
+			#var_dump( $this->data );
 			$config = <<<config
 server {
     listen $http_port;
@@ -78,10 +77,12 @@ config;
 		 * Saves Config.
 		 *
 		 * @param $code
+		 *
+		 * @return bool
 		 */
-		protected function save_config( $code ) {
-			$this->save_cache( 'nginx', $code );
-			file_put_contents( slashit( nginx_sites_config() ) . $this->data['host_id'] . '.conf', $code );
+		public function save_config() {
+			$this->save_cache( 'nginx' );
+			return ( @file_put_contents( slashit( nginx_sites_config() ) . $this->data['host_id'] . '.conf', $this->config_code ) );
 		}
 	}
 }
