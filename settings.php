@@ -304,6 +304,52 @@ if ( isset( $_POST['update_settings'] ) ) {
 				</div>
 			</div>
 
+			<div class="card">
+				<div class="card-header" id="mysql_config">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse"
+								data-target="#mysql_config_data">
+							MySQL Config
+						</button>
+					</h2>
+				</div>
+
+				<div id="mysql_config_data" class="collapse show" aria-labelledby="mysql_config"
+					 data-parent="#settings_accordion">
+					<div class="card-body">
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Host</span>
+								</div>
+								<input type="text" class="form-control" name="mysql[host]"
+									   placeholder="" value="<?php echo get_option( 'mysql/host' ); ?>">
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Username</span>
+								</div>
+								<input type="text" class="form-control" name="mysql[username]"
+									   placeholder="root" required
+									   value="<?php echo get_option( 'mysql/username' ); ?>">
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Password</span>
+								</div>
+								<input type="text" class="form-control" name="mysql[password]"
+									   placeholder="" value="<?php echo get_option( 'mysql/password' ); ?>">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<button type="submit" class="btn btn-primary mt-3" name="update_settings">Update Settings</button>

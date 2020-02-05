@@ -26,5 +26,10 @@
 	  "http"  : "81",
 	  "https" : "444"
 	}
+  },
+  "mysql"            : {
+	"username" : "root",
+	"password" : "",
+	"host"     : "localhost"
   }
 }
