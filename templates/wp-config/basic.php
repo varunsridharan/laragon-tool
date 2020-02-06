@@ -25,19 +25,24 @@ define( 'CUSTOM_USER_META_TABLE', $table_prefix . 'usermeta' );
 // {AUTH_KEYS}
 
 /* HTTPS */
-define( 'FORCE_SSL_LOGIN', true );
-define( 'FORCE_SSL_ADMIN', true );
-define( 'WP_DISABLE_FATAL_ERROR_HANDLER', false );
+define( 'FORCE_SSL_LOGIN', '{SSL_LOGIN}' );
+define( 'FORCE_SSL_ADMIN', '{SSL_ADMIN}' );
+define( 'WP_DISABLE_FATAL_ERROR_HANDLER', '{FATAL_ERROR_HANDLER}' );
 
 /* URL / Path */
 define( 'WP_SITEURL', $site_url );
 define( 'WP_HOME', $site_url );
-define( 'WP_CONTENT_DIR', __DIR__ . '/wp-content' );
 define( 'WP_CONTENT_URL', $site_url . '/wp-content' );
+define( 'WP_PLUGIN_URL', $site_url . '/wp-content/plugins' );
+define( 'WPMU_PLUGIN_URL', $site_url . '/wp-content/mu-plugins/' ); # Plugins Must-Use
+
+define( 'WP_CONTENT_DIR', __DIR__ . '/wp-content' );
 define( 'WP_PLUGIN_DIR', __DIR__ . '/wp-content/plugins' );
 define( 'PLUGINDIR', __DIR__ . '/wp-content/plugins' );
-define( 'WP_PLUGIN_URL', $site_url . '/wp-content/plugins' );
+define( 'WPMU_PLUGIN_DIR', __DIR__ . '/wp-content/mu-plugins/' ); # Plugins Must-Use
+define( 'MUPLUGINDIR', __DIR__ . '/wp-content/mu-plugins/' ); # Plugins Must-Use
 define( 'UPLOADS', 'wp-content/uploads' );
+define( 'MEDIA_TRASH', true );
 
 /* Cookies */
 define( 'COOKIE_DOMAIN', $domain );
@@ -50,49 +55,33 @@ define( 'PASS_COOKIE', 'wordpresspass_V95jHHxAusrL4PLi9H4hMmyjZrNYffJQV7lzEwpjtF
 define( 'USER_COOKIE', 'wordpressuser_V95jHHxAusrL4PLi9H4hMmyjZrNYffJQV7lzEwpjtFHR0NcBndGcLv0OV3T3nJYq' );
 define( 'RECOVERY_MODE_COOKIE', 'wordpress_rec_V95jHHxAusrL4PLi9H4hMmyjZrNYffJQV7lzEwpjtFHR0NcBndGcLv0OV3T3nJYq' );
 
-/* Content */
-define( 'AUTOSAVE_INTERVAL', 30 );
-define( 'WP_POST_REVISIONS', 5 );
-define( 'MEDIA_TRASH', false );
-define( 'EMPTY_TRASH_DAYS', 7 );
-define( 'WP_MAIL_INTERVAL', 86400 );
-
 /* Memory */
 define( 'WP_MEMORY_LIMIT', '256M' );
 define( 'WP_MAX_MEMORY_LIMIT', '512M' );
 
 /* Updating */
-define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'CORE_UPGRADE_SKIP_NEW_BUNDLED', false );
 define( 'DO_NOT_UPGRADE_GLOBAL_TABLES', true );
 
 /* File edition */
-define( 'DISALLOW_FILE_MODS', true );
-define( 'DISALLOW_FILE_EDIT', true );
+define( 'DISALLOW_FILE_MODS', false );
+define( 'DISALLOW_FILE_EDIT', false );
 define( 'IMAGE_EDIT_OVERWRITE', false );
 
 /* Performance */
-define( 'WP_CACHE', true );
+define( 'WP_CACHE', false );
 define( 'WP_CACHE_KEY_SALT', 'y2usqlmmbvx1ftfl1m:' );
-define( 'COMPRESS_CSS', true );
-define( 'COMPRESS_SCRIPTS', true );
-define( 'CONCATENATE_SCRIPTS', true );
-define( 'ENFORCE_GZIP', true );
+define( 'COMPRESS_CSS', false );
+define( 'COMPRESS_SCRIPTS', false );
+define( 'CONCATENATE_SCRIPTS', false );
+define( 'ENFORCE_GZIP', false );
 
-/* Cron */
-define( 'DISABLE_WP_CRON', false );
-define( 'ALTERNATE_WP_CRON', false );
-define( 'WP_CRON_LOCK_TIMEOUT', 60 );
-
-/* Plugins Must-Use */
-define( 'WPMU_PLUGIN_DIR', __DIR__ . '/wp-content/mu-plugins/' );
-define( 'WPMU_PLUGIN_URL', $site_url . '/wp-content/mu-plugins/' );
-define( 'MUPLUGINDIR', __DIR__ . '/wp-content/mu-plugins/' );
 
 /* MultiSite */
-define( 'WP_ALLOW_MULTISITE', true );
-define( 'SUBDOMAIN_INSTALL', true );
+define( 'WP_ALLOW_MULTISITE', '{MULTISITE}' );
+define( 'SUBDOMAIN_INSTALL', '{SUBDOMAIN}' );
 define( 'NOBLOGREDIRECT', $site_url );
 define( 'WP_DEFAULT_THEME', 'twentytwenty' );
 
@@ -103,13 +92,13 @@ if ( WP_HTTP_BLOCK_EXTERNAL ) {
 }
 
 /* Debug */
-define( 'WP_DEBUG', true );
+define( 'WP_DEBUG', '{DEBUG}' );
 if ( WP_DEBUG ) {
-	define( 'WP_DEBUG_DISPLAY', true );
-	define( 'WP_DEBUG_LOG', __DIR__ . '/wp-content/debug.log' );
+	define( 'WP_DEBUG_DISPLAY', '{DEBUG_DISPLAY}' );
+	define( 'WP_DEBUG_LOG', '{DEBUG_LOG}' );
 }
-define( 'SCRIPT_DEBUG', true );
-define( 'SAVEQUERIES', true );
+define( 'SCRIPT_DEBUG', '{SCRIPT_DEBUG}' );
+define( 'SAVEQUERIES', '{SAVE_QUERIES}' );
 
 /* Do not change anything else after this line! Thank you! */
 

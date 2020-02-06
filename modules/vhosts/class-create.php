@@ -157,8 +157,8 @@ HTML;
 		 * Creates Domain Array.
 		 */
 		public function handle_domains() {
-			$base_domains                 = array();
-			$widlcard_domains             = array();
+			$base_domains     = array();
+			$widlcard_domains = array();
 
 			foreach ( $this->data['vhostdomains'] as $key => $val ) {
 				$val                                  = trim( $val );
@@ -213,6 +213,15 @@ HTML;
 			if ( false === $status ) {
 				$this->danger( 'Unable to create database file @ <code>' . $this->host_db_file_path() . '</code> with below content <div class="mt-3"><pre>' . json_encode( $data ) . '</pre></div>' );
 			}
+		}
+
+		/**
+		 * Returns A Valid Host ID.
+		 *
+		 * @return null
+		 */
+		public function host_id() {
+			return $this->host_id;
 		}
 
 		public function reload_laragon() {

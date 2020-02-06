@@ -3,28 +3,10 @@
 	<hr class="my-2">
 
 	<div class="form-row">
-		<div class="col-md-3 mb-3">
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" name="wp_config[revisions]" id="revisions" checked>
-				<label class="custom-control-label" for="revisions">Revisions</label>
-			</div>
-			<small class="form-text text-muted">Enable/disable revisions.</small>
-		</div>
 
 		<div class="col-md-3 mb-3">
 			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" name="wp_config[media_trash]" id="media_trash"
-					   checked>
-				<label class="custom-control-label" for="media_trash">Media Trash</label>
-
-			</div>
-			<small class="form-text text-muted">Enable trash for media.</small>
-		</div>
-
-		<div class="col-md-3 mb-3">
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" name="wp_config[multisite]" id="multisite"
-					   checked>
+				<input type="checkbox" class="custom-control-input" name="wp_config[multisite]" id="multisite" checked>
 				<label class="custom-control-label" for="multisite">Multisite</label>
 			</div>
 			<small class="form-text text-muted">Enable Multisite / Network Ability.</small>
@@ -33,8 +15,7 @@
 		<div class="col-md-3 mb-3">
 			<div class="custom-control custom-switch">
 				<input type="checkbox" class="custom-control-input" name="wp_config[multisite_subdomain]"
-					   id="multisite_subdomain"
-					   checked>
+					   id="multisite_subdomain" checked>
 				<label class="custom-control-label" for="multisite_subdomain">Sites in subdomains</label>
 			</div>
 			<small class="form-text text-muted">Enabled means subdomains, disabled means folders.</small>
@@ -86,8 +67,7 @@
 
 		<div class="col-md-3 mb-3">
 			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" name="wp_config[ssl_login]" id="ssl_login"
-					   checked>
+				<input type="checkbox" class="custom-control-input" name="wp_config[ssl_login]" id="ssl_login" checked>
 				<label class="custom-control-label" for="ssl_login">WP SSL Login</label>
 			</div>
 			<small class="form-text text-muted">Force SSL Login.</small>
@@ -95,11 +75,35 @@
 
 		<div class="col-md-3 mb-3">
 			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" name="wp_config[ssl_admin]" id="ssl_admin"
-					   checked>
+				<input type="checkbox" class="custom-control-input" name="wp_config[ssl_admin]" id="ssl_admin" checked>
 				<label class="custom-control-label" for="ssl_admin">WP SSL Admin</label>
 			</div>
 			<small class="form-text text-muted">Force SSL Admin.</small>
+		</div>
+
+		<div class="col-md-3 mb-3">
+			<div class="custom-control custom-switch">
+				<input type="checkbox" class="custom-control-input" name="wp_config[error_handler]" id="error_handler"
+					   checked>
+				<label class="custom-control-label" for="error_handler">WP Fatal Error Handler</label>
+			</div>
+		</div>
+	</div>
+
+	<h3 class="mb-1 mt-1">Database</h3>
+	<hr class="my-2">
+
+	<div class="form-row">
+		<div class="input-group col-md-12 mb-2">
+			<div class="input-group-prepend"><span class="input-group-text">Database Name</span></div>
+			<input type="text" class="form-control" name="wp_config[db_name]" placeholder="wp_<?php echo time(); ?>">
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="input-group col-md-12 mb-2">
+			<div class="input-group-prepend"><span class="input-group-text">Table Prefix</span></div>
+			<input type="text" class="form-control" name="wp_config[db_prefix]" value="wp_">
 		</div>
 	</div>
 </div>
