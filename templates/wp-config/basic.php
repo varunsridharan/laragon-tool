@@ -34,7 +34,7 @@ define( 'DB_COLLATE', 'utf8mb4_general_ci' );
 
 /* Tables */
 $table_prefix = '{DB_PREFIX}';
-define( 'CUSTOM_USER_TABLE', $table_prefix . 'user' );
+define( 'CUSTOM_USER_TABLE', $table_prefix . 'users' );
 define( 'CUSTOM_USER_META_TABLE', $table_prefix . 'usermeta' );
 
 /* Security Keys */

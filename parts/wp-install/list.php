@@ -1,4 +1,4 @@
-<div class="card-group ">
+<div class="card-group " id="wpinstall-welcome">
 
 	<div class="card">
 		<div class="card-body">

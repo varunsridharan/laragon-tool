@@ -135,4 +135,18 @@ $( function() {
 	} );
 
 	$( '[data-toggle="tooltip"]' ).tooltip();
+
+	$( '#wpinstall-welcome a' ).click( function() {
+		$( 'form' ).show();
+		$( '#wpinstall-welcome' ).remove();
+
+		if( 'cloneinstall' === $( this ).attr( 'id' ) ) {
+			$( 'form' ).find( '.no-clone' ).remove();
+			$( 'form' ).find( '.clone-config' ).show();
+		}
+
+		if( 'newinstall' === $( this ).attr( 'id' ) ) {
+			$( 'form' ).find( '.no-new' ).remove();
+		}
+	} );
 } );

@@ -1,8 +1,8 @@
 <div class="jumbotron pb-4 pt-3 mb-0 mt-3" style="background:none; border:1px solid #ccc;">
-	<h3 class="mb-1 mt-1">WordPress</h3>
-	<hr class="my-2">
+	<h3 class="mb-1 mt-1 no-clone">WordPress</h3>
+	<hr class="my-2 no-clone">
 
-	<div class="form-row">
+	<div class="form-row no-clone">
 		<div class="input-group col-md-12 mb-2">
 			<div class="input-group-prepend"><span class="input-group-text">Version</span></div>
 			<select name="wpinstall[version]" class="form-control">
@@ -23,6 +23,27 @@
 			</select>
 		</div>
 	</div>
+
+	<h3 class="no-new">Clone Config</h3>
+	<hr class="my-2 no-new">
+
+	<div class="form-row no-new">
+		<div class="input-group col-md-12 mb-2">
+			<div class="input-group-prepend"><span class="input-group-text">Source WP Database Name</span></div>
+			<input type="text" class="form-control" name="wp_clone[db_name]" placeholder="wp_<?php echo time(); ?>">
+		</div>
+		<small>Enter the database name from which database to clone for new install</small>
+	</div>
+
+	<div class="form-row no-new">
+		<div class="input-group col-md-12 mb-2">
+			<div class="input-group-prepend"><span class="input-group-text">Source WordPress Path</span></div>
+			<input type="text" class="form-control" name="wp_clone[wp_path]"
+				   placeholder="${GLOBAL_DOCUMENT_ROOT}/your-wp-path/">
+		</div>
+		<small>Enter the source wordpress path to copy files to new install</small>
+	</div>
+
 
 	<h3 class="mb-1 mt-1">WP-Config</h3>
 	<hr class="my-2">
