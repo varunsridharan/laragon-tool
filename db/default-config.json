@@ -31,5 +31,9 @@
 	"username" : "root",
 	"password" : "",
 	"host"     : "localhost"
+  },
+  "wp_clone"         : {
+	"template"    : "${GLOBAL_DOCUMENT_ROOT}/",
+	"template_db" : "wp_template"
   }
 }

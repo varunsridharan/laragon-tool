@@ -30,7 +30,8 @@
 	<div class="form-row no-new">
 		<div class="input-group col-md-12 mb-2">
 			<div class="input-group-prepend"><span class="input-group-text">Source WP Database Name</span></div>
-			<input type="text" class="form-control" name="wp_clone[db_name]" placeholder="wp_<?php echo time(); ?>">
+			<input type="text" class="form-control" name="wp_clone[db_name]" placeholder="wp_<?php echo time(); ?>"
+				   value="<?php echo get_option( 'wp_clone/template_db' ); ?>">
 		</div>
 		<small>Enter the database name from which database to clone for new install</small>
 	</div>
@@ -39,7 +40,8 @@
 		<div class="input-group col-md-12 mb-2">
 			<div class="input-group-prepend"><span class="input-group-text">Source WordPress Path</span></div>
 			<input type="text" class="form-control" name="wp_clone[wp_path]"
-				   placeholder="${GLOBAL_DOCUMENT_ROOT}/your-wp-path/">
+				   placeholder="${GLOBAL_DOCUMENT_ROOT}/your-wp-path/"
+				   value="<?php echo get_option( 'wp_clone/template' ); ?>">
 		</div>
 		<small>Enter the source wordpress path to copy files to new install</small>
 	</div>

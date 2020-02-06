@@ -95,8 +95,8 @@ define( 'ENFORCE_GZIP', false );
 
 
 /* MultiSite */
-define( 'WP_ALLOW_MULTISITE', '{MULTISITE}' );
-define( 'SUBDOMAIN_INSTALL', '{SUBDOMAIN}' );
+#define( 'WP_ALLOW_MULTISITE', '{MULTISITE}' );
+#define( 'SUBDOMAIN_INSTALL', '{SUBDOMAIN}' );
 define( 'NOBLOGREDIRECT', $site_url );
 define( 'WP_DEFAULT_THEME', 'twentytwenty' );
 

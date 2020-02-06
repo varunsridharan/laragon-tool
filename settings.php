@@ -350,6 +350,44 @@ if ( isset( $_POST['update_settings'] ) ) {
 					</div>
 				</div>
 			</div>
+
+
+			<div class="card">
+				<div class="card-header" id="wpclone_config">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse"
+								data-target="#wpclone_config_data">
+							WP Clone Config
+						</button>
+					</h2>
+				</div>
+
+				<div id="wpclone_config_data" class="collapse show" aria-labelledby="wpclone_config"
+					 data-parent="#settings_accordion">
+					<div class="card-body">
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Template WordPress Files</span>
+								</div>
+								<input type="text" class="form-control" name="wp_clone[template]"
+									   placeholder="" value="<?php echo get_option( 'wp_clone/template' ); ?>">
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="input-group col-md-12 mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Template WordPress Database</span>
+								</div>
+								<input type="text" class="form-control" name="wp_clone[template_db]"
+									   placeholder="root" required
+									   value="<?php echo get_option( 'wp_clone/template_db' ); ?>">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<button type="submit" class="btn btn-primary mt-3" name="update_settings">Update Settings</button>
