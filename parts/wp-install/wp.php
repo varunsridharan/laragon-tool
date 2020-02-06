@@ -3,6 +3,31 @@
 	<hr class="my-2">
 
 	<div class="form-row">
+		<div class="input-group col-md-12 mb-2">
+			<div class="input-group-prepend"><span class="input-group-text">Version</span></div>
+			<select name="wpinstall[version]" class="form-control">
+				<?php
+				$files = glob( ABSPATH . '/templates/wp/*.zip' );
+				if ( ! empty( $files ) ) {
+					$values = array_map( function ( $data ) {
+						return str_replace( '.zip', '', basename( $data ) );
+					}, array_values( $files ) );
+
+					rsort( $values );
+
+					foreach ( $values as $file ) {
+						echo '<option value="' . $file . '">' . $file . '</option>';
+					}
+				}
+				?>
+			</select>
+		</div>
+	</div>
+
+	<h3 class="mb-1 mt-1">WP-Config</h3>
+	<hr class="my-2">
+
+	<div class="form-row">
 
 		<div class="col-md-3 mb-3">
 			<div class="custom-control custom-switch">

@@ -126,6 +126,10 @@ function cache_setup() {
 	if ( ! file_exists( ABSPATH . '/cache/hosts' ) ) {
 		@mkdir( ABSPATH . '/cache/hosts' );
 	}
+
+	if ( ! file_exists( ABSPATH . '/cache/wpconfig' ) ) {
+		@mkdir( ABSPATH . '/cache/wpconfig' );
+	}
 }
 
 /**

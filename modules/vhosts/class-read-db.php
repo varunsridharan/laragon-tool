@@ -73,13 +73,15 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 		}
 
 		/**
-		 * Generates Domain Lists.
+		 *  Generates Domain Lists.
 		 *
-		 * @return string
+		 * @param bool $html
+		 *
+		 * @return array|string
 		 */
-		public function domains_list() {
+		public function domains_list( $html = true ) {
 			$vhostdomains = array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] );
-			return implode( '<br/>', $vhostdomains );
+			return ( true === $html ) ? implode( '<br/>', $vhostdomains ) : $vhostdomains;
 		}
 
 		/**

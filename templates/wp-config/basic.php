@@ -1,4 +1,20 @@
 <?php
+/**
+ * Domains List : {DOMAINS_LIST}
+ * Created Date & Time : {CREATED_TIME}
+ * Apache Host : {APACHE_HOST}
+ * Nginx Host : {NGINX_HOST}
+ */
+
+/* Debug */
+define( 'WP_DEBUG', '{DEBUG}' );
+if ( WP_DEBUG ) {
+	define( 'WP_DEBUG_DISPLAY', '{DEBUG_DISPLAY}' );
+	define( 'WP_DEBUG_LOG', '{DEBUG_LOG}' );
+}
+define( 'SCRIPT_DEBUG', '{SCRIPT_DEBUG}' );
+define( 'SAVEQUERIES', '{SAVE_QUERIES}' );
+
 $site_url = '';
 $domain   = '';
 $scheme   = '';
@@ -63,7 +79,6 @@ define( 'WP_MAX_MEMORY_LIMIT', '512M' );
 define( 'WP_AUTO_UPDATE_CORE', false );
 define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'CORE_UPGRADE_SKIP_NEW_BUNDLED', false );
-define( 'DO_NOT_UPGRADE_GLOBAL_TABLES', true );
 
 /* File edition */
 define( 'DISALLOW_FILE_MODS', false );
@@ -90,15 +105,6 @@ define( 'WP_HTTP_BLOCK_EXTERNAL', false );
 if ( WP_HTTP_BLOCK_EXTERNAL ) {
 	define( 'WP_ACCESSIBLE_HOSTS', '*.wordpress.org,*.github.com' );
 }
-
-/* Debug */
-define( 'WP_DEBUG', '{DEBUG}' );
-if ( WP_DEBUG ) {
-	define( 'WP_DEBUG_DISPLAY', '{DEBUG_DISPLAY}' );
-	define( 'WP_DEBUG_LOG', '{DEBUG_LOG}' );
-}
-define( 'SCRIPT_DEBUG', '{SCRIPT_DEBUG}' );
-define( 'SAVEQUERIES', '{SAVE_QUERIES}' );
 
 /* Do not change anything else after this line! Thank you! */
 

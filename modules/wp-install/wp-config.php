@@ -26,11 +26,15 @@ if ( ! class_exists( '\VSP\Laragon\Modules\WP_Install\WPCONFIG' ) ) {
 		 */
 		public function generate() {
 			$find = array(
-				"'{DB_PREFIX}'"           => ( isset( $this->config['db_prefix'] ) ) ? $this->config['db_prefix'] : 'wp_',
-				"'{DB_USER}'"             => ( isset( $this->config['db_user'] ) ) ? $this->config['db_user'] : 'root',
-				"'{DB_NAME}'"             => ( isset( $this->config['db_name'] ) ) ? $this->config['db_name'] : false,
-				"'{DB_PASS}'"             => ( isset( $this->config['db_pass'] ) ) ? $this->config['db_pass'] : '',
-				"'{DB_HOST}'"             => ( isset( $this->config['db_host'] ) ) ? $this->config['db_host'] : 'localhost',
+				"{DOMAINS_LIST}"          => ( isset( $this->config['domains_list'] ) ) ? implode( '  |  ', $this->config['domains_list'] ) : '',
+				"{APACHE_HOST}"           => ( isset( $this->config['apache_host'] ) ) ? $this->config['apache_host'] : '',
+				"{NGINX_HOST}"            => ( isset( $this->config['nginx_host'] ) ) ? $this->config['nginx_host'] : '',
+				"{CREATED_TIME}"          => date( 'D d/M/Y' ),
+				"'{DB_PREFIX}'"           => ( isset( $this->config['db_prefix'] ) ) ? "'" . $this->config['db_prefix'] . "'" : "'wp_'",
+				"'{DB_USER}'"             => ( isset( $this->config['db_user'] ) ) ? "'" . $this->config['db_user'] . "'" : "'root'",
+				"'{DB_NAME}'"             => ( isset( $this->config['db_name'] ) ) ? "'" . $this->config['db_name'] . "'" : "''",
+				"'{DB_PASS}'"             => ( isset( $this->config['db_pass'] ) ) ? "'" . $this->config['db_pass'] . "'" : "''",
+				"'{DB_HOST}'"             => ( isset( $this->config['db_host'] ) ) ? "'" . $this->config['db_host'] . "'" : "'localhost'",
 				"'{SSL_LOGIN}'"           => ( isset( $this->config['ssl_login'] ) && 'on' === $this->config['ssl_login'] ) ? 'TRUE' : 'FALSE',
 				"'{SSL_ADMIN}'"           => ( isset( $this->config['ssl_admin'] ) && 'on' === $this->config['ssl_admin'] ) ? 'TRUE' : 'FALSE',
 				"'{FATAL_ERROR_HANDLER}'" => ( isset( $this->config['error_handler'] ) && 'on' === $this->config['error_handler'] ) ? 'TRUE' : 'FALSE',
