@@ -46,8 +46,7 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 	<table class="table table-striped table-bordered table-hover">
 		<thead class="thead-dark">
 		<tr>
-			<th style="width:60px;">Host ID</th>
-			<th>Web Root</th>
+			<th>Host Info</th>
 			<th>Domains</th>
 			<th style="width:20px;">Apache</th>
 			<th style="width:20px;">Nginx</th>
@@ -87,9 +86,13 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 
 					echo <<<HTML
 <tr>
-	<td>{$instance->host_id()}</td>
-	<td>{$instance->document_root()}</td>
-	<td>{$instance->domains_list()}</td>
+	<td>
+		<small><strong>Host ID : </strong> {$instance->host_id()}</small> <br/>
+		<small> <strong>Root : </strong> <a target="_new" href="file:{$instance->document_root()}">{$instance->document_root()}</a> </small>
+	</td>
+	<!-- <td>{$instance->host_id()}</td> -->
+	<!--  <td>{$instance->document_root()}</td> -->
+	<td><small>{$instance->domains_list()}</small></td>
 	<td>$apache_status_html</td>
 	<td>$nginx_status_html</td>
 	<td>{$instance->ssl_expairy_status()}</td>
@@ -102,8 +105,8 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 				<a class="dropdown-item regen-ssl" href="vhost-actions.php?action=regenssl&id={$instance->host_id()}&type=apache">Regenerate SSL</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Edit Config</h6>
-				<a class="dropdown-item" href="#">Apache</a>
-				<a class="dropdown-item" href="#">Nginx</a>
+				<a class="dropdown-item" href="vhost-actions.php?action=edit-config&id={$instance->host_id()}&type=apache">Apache</a>
+				<a class="dropdown-item" href="vhost-actions.php?action=edit-config&id={$instance->host_id()}&type=nginx">Nginx</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Restore Config</h6>
 				<a class="dropdown-item text-danger restore-vhost-config" href="vhost-actions.php?action=restore&id={$instance->host_id()}&type=apache">Apache</a>
@@ -124,8 +127,7 @@ HTML;
 
 		<tfoot class="thead-dark">
 		<tr>
-			<th>Host ID</th>
-			<th>Web Root</th>
+			<th>Host Info</th>
 			<th>Domains</th>
 			<th>Apache</th>
 			<th>Nginx</th>

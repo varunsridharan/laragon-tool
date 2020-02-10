@@ -3,7 +3,7 @@
 		<div class="input-group-prepend"><span class="input-group-text">Document Root</span>
 		</div>
 		<input type="text" class="form-control" name="vhosts[document_root]"
-			   value="${GLOBAL_DOCUMENT_ROOT}/your-web-path/"
+			   value="${GLOBAL_DOCUMENT_ROOT}/"
 			   placeholder="${GLOBAL_DOCUMENT_ROOT}/website-path/"
 			   required>
 	</div>

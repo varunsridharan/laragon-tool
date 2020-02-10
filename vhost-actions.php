@@ -55,4 +55,38 @@ if ( isset( $_REQUEST['action'] ) ) {
 		header( 'location:vhost.php?failed=delete' );
 		exit;
 	}
+
+	if ( 'edit-config' === $action ) {
+		$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( host_db_file( $host_id ) );
+		if ( $instance->is_readable() ) {
+			if ( isset( $_POST['force-save'] ) && 'yes' === $_POST['force-save'] && isset( $_POST['config-file'] ) && ! empty( $_POST['config-file'] ) ) {
+				@file_put_contents( $instance->host_config( $type, 'live' ), $_POST['config-file'] );
+				echo <<<HTML
+<div class="alert alert-success" role="alert"> Config Updated. Please Restart Laragon </div>
+HTML;
+
+			}
+
+
+			if ( file_exists( $instance->host_config( $type, 'live' ) ) ) {
+				$config = @file_get_contents( $instance->host_config( $type, 'live' ) );
+
+				echo <<<HTML
+<form method="post">
+<h4> Editing : {$instance->host_config( $type, 'live' )} </h4>
+	<div class="form-row">
+		<textarea name="config-file" style="width: 100%; min-height: 350px; max-height: 650px; height: 550px;font-size: 13px;">$config</textarea>
+		<input type="hidden" value="$host_id" name="id">
+		<input type="hidden" value="$type" name="type">
+		<input type="hidden" value="yes" name="force-save">
+	</div>
+	<div class="form-row mt-3">
+		<button name="save_config" class="btn btn-success">Save Config</button>
+	</div>
+</form>
+HTML;
+
+			}
+		}
+	}
 }
