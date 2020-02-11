@@ -31,7 +31,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Nginx' ) ) {
 			$config = <<<config
 server {
     listen $http_port;
-    listen $https_port ssl;
+    listen $https_port ssl http2;
     server_name $main_domain;
     root "$doc_root";
     

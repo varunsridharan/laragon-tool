@@ -3,7 +3,7 @@ require __DIR__ . './config.php';
 if ( isset( $_REQUEST['action'] ) ) {
 	$action  = ( isset( $_REQUEST['action'] ) ) ? $_REQUEST['action'] : false;
 	$type    = ( isset( $_REQUEST['type'] ) ) ? $_REQUEST['type'] : false;
-	$type    = ( 'nginx' === $type ) ? 'nginx' : 'apache';
+	$type    = ( ! in_array( $type, array( 'nginx', 'apache', 'ssl' ) ) ) ? 'apache' : $type;
 	$host_id = ( isset( $_REQUEST['id'] ) ) ? $_REQUEST['id'] : false;
 
 	if ( 'vhost-update-status' === $action ) {
@@ -88,5 +88,70 @@ HTML;
 
 			}
 		}
+	}
+
+	if ( 'regenerate' === $action ) {
+		$files  = glob( ABSPATH . '/db/vhosts/*.json' );
+		$status = array(
+			'nginx_errors'  => array(),
+			'apache_errors' => array(),
+			'ssl_errors'    => array(),
+		);
+		if ( ! empty( $files ) ) {
+			foreach ( $files as $db ) {
+				$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( $db );
+				if ( $instance->is_readable() ) {
+					if ( 'nginx' === $type ) {
+						if ( false === $instance->regenerate_config( 'nginx' ) ) {
+							$status['nginx_errors'][] = $instance->host_id();
+						}
+					}
+
+					if ( 'apache' === $type ) {
+						if ( false === $instance->regenerate_config( 'apache' ) ) {
+							$status['apache_errors'][] = $instance->host_id();
+						}
+					}
+
+					if ( 'ssl' === $type ) {
+						if ( false === $instance->regenerate_ssl() ) {
+							$status['ssl'][] = $instance->host_id();
+						}
+					}
+				}
+			}
+		}
+
+		$instance = new \VSP\Laragon\Modules\Alert();
+		if ( 'ssl' === $type ) {
+			$instance->success( 'SSL Certificate Regenerated. Please Reload Laragon.' );
+		} else {
+			$instance->success( 'VHost Config File Regenerated. Please Reload Laragon.' );
+		}
+
+		echo $instance->alerts();
+
+		if ( ! empty( $status['nginx_errors'] ) || ! empty( $status['apache_errors'] ) ) {
+			if ( ! empty( $status['nginx_errors'] ) ) {
+				foreach ( $status['nginx_errors'] as $id ) {
+					$instance->danger( 'Unable To Regenerate <strong>' . $id . '</strong> Config For  <i>Nginx</i>' );
+				}
+			}
+
+			if ( ! empty( $status['apache_errors'] ) ) {
+				foreach ( $status['apache_errors'] as $id ) {
+					$instance->danger( 'Unable To Regenerate <strong>' . $id . '</strong> Config For  <i>Apache</i>' );
+				}
+			}
+
+			if ( ! empty( $status['ssl_errors'] ) ) {
+				foreach ( $status['ssl_errors'] as $id ) {
+					$instance->danger( 'Unable To Regenerate SSL For <strong>' . $id . '</strong>' );
+				}
+			}
+
+			echo $instance->alerts();
+		}
+
 	}
 }

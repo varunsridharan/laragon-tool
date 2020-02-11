@@ -206,7 +206,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 				return $instance->save_config();
 			}
 
-			if ( 'apache' === $type ) {
+			if ( 'nginx' === $type ) {
 				$instance = new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
 					'document_root' => $this->document_root(),
 					'host_id'       => $this->host_id(),

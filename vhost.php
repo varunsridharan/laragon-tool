@@ -40,8 +40,25 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 }
 
 ?>
-	<a href="add-vhost.php" class="btn btn-success">Add Virtual Host</a>
-	<br/>
+	<div class="row">
+		<div class="col-6">
+			<a href="add-vhost.php" class="btn btn-success">Add Virtual Host</a>
+		</div>
+		<div class="col-6 text-right">
+			<div class="dropdown">
+				<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="regen"
+						data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">Re-Generate
+				</button>
+				<div class="dropdown-menu" aria-labelledby="regen">
+					<a class="dropdown-item" href="vhost-actions.php?action=regenerate&type=ssl">SSL Certificate</a>
+					<h6 class="dropdown-header">VHost Config</h6>
+					<a class="dropdown-item" href="vhost-actions.php?action=regenerate&type=apache">Apache</a>
+					<a class="dropdown-item" href="vhost-actions.php?action=regenerate&type=nginx">Nginx</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	<br/>
 	<table class="table table-striped table-bordered table-hover">
 		<thead class="thead-dark">

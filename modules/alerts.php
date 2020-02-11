@@ -19,7 +19,9 @@ if ( ! trait_exists( '\VSP\Laragon\Modules\Alert_Handler' ) ) {
 		 * @return string
 		 */
 		public function alerts() {
-			return $this->alert_html;
+			$html             = $this->alert_html;
+			$this->alert_html = '';
+			return $html;
 		}
 
 		/**
