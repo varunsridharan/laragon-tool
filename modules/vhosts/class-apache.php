@@ -64,6 +64,8 @@ define SSL_KEY "$ssl_key"
 $ServerAlias
 
 	ErrorLog "\${ERROR_LOG}"
+	
+	Redirect / https://\${MAIN_DOMAIN}
 
 	<IfModule log_config_module>
 		CustomLog "\${HTTP_ACCESS_LOG}" combined

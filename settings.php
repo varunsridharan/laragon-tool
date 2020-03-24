@@ -209,6 +209,18 @@ if ( isset( $_POST['update_settings'] ) ) {
 							</small>
 						</div>
 
+						<div class="form-row">
+							<div class="col-md-12 mb-3">
+								<div class="custom-control custom-switch">
+									<input type="checkbox" class="custom-control-input" name="apache[force_ssl]"
+										   id="apache_force_ssl"
+										   required <?php echo ( true === get_option( 'apache/force_ssl', true ) ) ? 'checked' : ''; ?>>
+									<label class="custom-control-label" for="apache_force_ssl">Force SSL
+										Redirect</label>
+								</div>
+							</div>
+						</div>
+
 						<h4 class="mb-3">Ports</h4>
 
 						<div class="form-row">

@@ -26,8 +26,9 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Settings\Save' ) ) {
 				}
 			}
 
-			$data['hosts_file_entry'] = ( isset( $data['hosts_file_entry'] ) ) ? 'on' : false;
-			$data['platform']         = strtolower( $data['platform'] );
+			$data['hosts_file_entry']    = ( isset( $data['hosts_file_entry'] ) ) ? 'on' : false;
+			$data['apache']['force_ssl'] = ( isset( $data['apache']['force_ssl'] ) ) ? true : false;
+			$data['platform']            = strtolower( $data['platform'] );
 
 			if ( ! in_array( strtolower( $data['platform'] ), SUPPORTED_PLATFORM, true ) ) {
 				$this->warning( 'Invalid Platform Given <code>(' . $data['platform'] . ')</code> expected are : <code>' . implode( ',', SUPPORTED_PLATFORM ) . '</code>' );

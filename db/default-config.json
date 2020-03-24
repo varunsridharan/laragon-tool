@@ -13,6 +13,7 @@
 	"config"        : "${LARAGON_PATH}\/etc\/apache2\/",
 	"sites_enabled" : "${APACHE_PATH}\/sites-enabled\/",
 	"alias"         : "${APACHE_PATH}\/alias\/",
+	"force_ssl"      : true,
 	"ports"         : {
 	  "http"  : "80",
 	  "https" : "443"
