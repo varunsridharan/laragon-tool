@@ -1,11 +1,9 @@
 {
   "scripts" : {
 	"update_data" : [
-	  "git clone https://github.com/varunsridharan/laragon-toolkit-data",
 	  "cp -r ./cache/ ./laragon-toolkit-data/",
 	  "cp -r ./db/ ./laragon-toolkit-data/",
-	  "cd laragon-toolkit-data && git add * && git commit -m \"Updated\" && git push origin ",
-	  "rm -rf laragon-toolkit-data"
+	  "cd laragon-toolkit-data && git add * && git commit -m \"Updated\" && git push origin "
 	]
   }
 }
