@@ -37,3 +37,4 @@ cache/
 # .idea/*.iml
 # .idea/modules
 /.idea/
+/cache/hosts/
