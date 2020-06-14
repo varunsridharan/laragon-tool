@@ -81,6 +81,10 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 
 
 				if ( $instance->is_readable() ) {
+					$doc_root        = $instance->document_root();
+					$doc_root_bg     = ( is_dir( $doc_root ) && ! file_exists( $doc_root ) ) ? 'table-danger' : '';
+					$doc_root_exists = ( is_dir( $doc_root ) && ! file_exists( $doc_root ) ) ? '<span class="text-danger font-weight-bolder">Document Root Not Found</span>' : '';
+
 					$nginx_status       = $instance->apache_status();
 					$nginx_status       = ( 'online' === $nginx_status ) ? 'checked' : $nginx_status;
 					$nginx_status       = ( 'offline' === $nginx_status ) ? ' ' : $nginx_status;
@@ -102,13 +106,12 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 </div > ';
 
 					echo <<<HTML
-<tr>
+<tr class="${doc_root_bg}">
 	<td>
 		<small><strong>Host ID : </strong> {$instance->host_id()}</small> <br/>
 		<small> <strong>Root : </strong> <a target="_new" href="file:{$instance->document_root()}">{$instance->document_root()}</a> </small>
+		<small class="d-block">$doc_root_exists</small>
 	</td>
-	<!-- <td>{$instance->host_id()}</td> -->
-	<!--  <td>{$instance->document_root()}</td> -->
 	<td><small>{$instance->domains_list()}</small></td>
 	<td>$apache_status_html</td>
 	<td>$nginx_status_html</td>
