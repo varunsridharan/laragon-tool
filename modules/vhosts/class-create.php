@@ -43,7 +43,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 			$instance = ( 'nginx' === $type ) ? $this->nginx_config() : $this->apache_config();
 
 			if ( $instance->save_config() ) {
-				//$this->save_db();
+				$this->save_db();
 				return true;
 			}
 			return false;
