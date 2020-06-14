@@ -5,6 +5,7 @@ laragon-toolkit-data/
 db/
 cache/
 ./cache/
+./cache/hosts
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
