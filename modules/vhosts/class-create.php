@@ -19,7 +19,12 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 		 */
 		protected $data = array();
 
-		protected $host_id = null;
+		/**
+		 * Stores Host ID.
+		 *
+		 * @var string
+		 */
+		protected $host_id = '';
 
 		/**
 		 * Create constructor.
@@ -27,8 +32,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 		 * @param array $data
 		 */
 		public function create_new( $data ) {
-			#$this->host_id = time();
-			$default = array(
+			$data = array_merge( array(
 				'document_root' => false,
 				'vhostdomains'  => false,
 				'apache'        => array(
@@ -45,8 +49,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 						'https' => '${VHOST_DOCUMENT_ROOT}/logs/nginx/https-access.log',
 					),
 				),
-			);
-			$data    = array_merge( $default, $data );
+			), $data );
 
 			if ( empty( $data['document_root'] ) ) {
 				$this->danger( 'Invalid Document Root. Unable To Create VHost' );
@@ -71,14 +74,10 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 
 						$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id, array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ) );
 						if ( ! $ssl->generate_ssl() ) {
-							$cachef1 = $ssl->key_file( true );
-							$cachef2 = $ssl->key_file();
-							$cachef3 = $ssl->cert_file( true );
-							$cachef4 = $ssl->cert_file();
-							$html    = <<<HTML
+							$html = <<<HTML
 Unable To Generate SSL / Move Generated SSL From Cache <br/>
-1. Copy File From : <code>$cachef1</code>  <br/> To <code>$cachef2</code> <br/><br/>
-2. Copy File From : <code>$cachef3</code> <br/> To <code>$cachef4</code>
+1. Copy File From : <code>{$ssl->key_file( true )}</code>  <br/> To <code>{$ssl->key_file()}</code> <br/><br/>
+2. Copy File From : <code>{$ssl->cert_file( true )}</code> <br/> To <code>{$ssl->cert_file()}</code>
 HTML;
 							$this->warning( $html );
 						}
@@ -88,35 +87,16 @@ HTML;
 							'cert' => $ssl->cert_file(),
 						);
 
-						$instance = new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
-							'document_root' => $this->data['document_root'],
-							'host_id'       => $this->host_id,
-							'ssl'           => array(
-								'key'  => $ssl->key_file(),
-								'cert' => $ssl->cert_file(),
-							),
-							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-						), $this->data['apache'] ) );
-						if ( ! $instance->save_config() ) {
+						if ( ! $this->apache_config()->save_config() ) {
 							$this->danger( 'Unable to create Apache config for this VHost' );
 						}
 
-						$instance = new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
-							'document_root' => $this->data['document_root'],
-							'host_id'       => $this->host_id,
-							'ssl'           => array(
-								'key'  => $ssl->key_file(),
-								'cert' => $ssl->cert_file(),
-							),
-							'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-						), $this->data['nginx'] ) );
-						if ( ! $instance->save_config() ) {
+						if ( ! $this->nginx_config()->save_config() ) {
 							$this->danger( 'Unable to create Nginx config for this VHost' );
 						}
 
 						$this->save_db();
 						$this->success( 'VHost Created. Reload Laragon And Start Using it.' );
-						#$this->reload_laragon();
 					} else {
 						$this->danger( 'Unable to create <code>document root</code>. Unable To Create VHost' );
 					}
@@ -127,12 +107,46 @@ HTML;
 		}
 
 		/**
+		 * Generates host File Config.
+		 *
+		 * @param string $type
+		 *
+		 * @return array
+		 */
+		protected function apache_nginx_config( $type = 'apache' ) {
+			return array_merge( array(
+				'document_root' => $this->data['document_root'],
+				'host_id'       => $this->host_id,
+				'ssl'           => $this->data['ssl'],
+				'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
+			), $this->data[ $type ] );
+		}
+
+		/**
+		 * Returns A Valid Apache Config Instance.
+		 *
+		 * @return \VSP\Laragon\Modules\VHosts\Apache
+		 */
+		protected function apache_config() {
+			return new \VSP\Laragon\Modules\VHosts\Apache( $this->apache_nginx_config( 'apache' ) );
+		}
+
+		/**
+		 * Returns a Valid Nginx Config Instance.
+		 *
+		 * @return \VSP\Laragon\Modules\VHosts\Nginx
+		 */
+		protected function nginx_config() {
+			return new \VSP\Laragon\Modules\VHosts\Nginx( $this->apache_nginx_config( 'nginx' ) );
+		}
+
+		/**
 		 * Generates DB File Path
 		 *
 		 * @return string
 		 */
 		public function host_db_file_path() {
-			return ABSPATH . '/db/vhosts/' . $this->host_id . '.json';
+			return host_db_file( $this->host_id() );
 		}
 
 		/**
@@ -218,16 +232,10 @@ HTML;
 		/**
 		 * Returns A Valid Host ID.
 		 *
-		 * @return null
+		 * @return string
 		 */
 		public function host_id() {
 			return $this->host_id;
-		}
-
-		public function reload_laragon() {
-			var_dump( microtime() );
-			var_dump( system( laragon_install_path() . 'laragon reload' ) );
-			var_dump( microtime() );
 		}
 	}
 }
