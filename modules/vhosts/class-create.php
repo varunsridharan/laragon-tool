@@ -27,6 +27,29 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 		protected $host_id = '';
 
 		/**
+		 * Runs Regenerate Script.
+		 *
+		 * @param $type
+		 * @param $host_id
+		 * @param $host_data
+		 *
+		 * @return bool
+		 */
+		public function regenerate( $type, $host_id, $host_data ) {
+			$this->host_id = $host_id;
+			$this->data    = $host_data;
+			$this->handle_domains();
+			$this->add_hosts_entry();
+			$instance = ( 'nginx' === $type ) ? $this->nginx_config() : $this->apache_config();
+
+			if ( $instance->save_config() ) {
+				//$this->save_db();
+				return true;
+			}
+			return false;
+		}
+
+		/**
 		 * Create constructor.
 		 *
 		 * @param array $data
@@ -72,7 +95,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Create' ) ) {
 						$this->handle_domains();
 						$this->add_hosts_entry();
 
-						$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id, array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ) );
+						$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id, $this->data['all_domains'] );
 						if ( ! $ssl->generate_ssl() ) {
 							$html = <<<HTML
 Unable To Generate SSL / Move Generated SSL From Cache <br/>
@@ -118,7 +141,7 @@ HTML;
 				'document_root' => $this->data['document_root'],
 				'host_id'       => $this->host_id,
 				'ssl'           => $this->data['ssl'],
-				'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
+				'domains'       => $this->data['all_domains'],
 			), $this->data[ $type ] );
 		}
 
@@ -173,18 +196,32 @@ HTML;
 		public function handle_domains() {
 			$base_domains     = array();
 			$widlcard_domains = array();
+			$sys_domains      = array();
 
-			foreach ( $this->data['vhostdomains'] as $key => $val ) {
-				$val                                  = trim( $val );
-				$wildcard                             = ltrim( $val, '*.' );
-				$base_domains[ $val ]                 = $val;
-				$widlcard_domains[ '*.' . $wildcard ] = '*.' . $wildcard;
+			$this->data['vhostdomains'] = ( isset( $this->data['vhostdomains']['base'] ) ) ? $this->data['vhostdomains']['base'] : $this->data['vhostdomains'];
+
+			if ( ! isset( $this->data['vhostdomains']['base'] ) ) {
+				foreach ( $this->data['vhostdomains'] as $key => $val ) {
+					$val                                  = trim( $val );
+					$wildcard                             = ltrim( $val, '*.' );
+					$base_domains[ $val ]                 = $val;
+					$widlcard_domains[ '*.' . $wildcard ] = '*.' . $wildcard;
+					$sys_domains[]                        = $val . '.log';
+					$sys_domains[]                        = $val . '.logs';
+					$sys_domains[]                        = $val . '.error';
+					$sys_domains[]                        = $val . '.err';
+					$sys_domains[]                        = $val . '.acc';
+					$sys_domains[]                        = $val . '.access';
+				}
+				$this->data['orginal_vhostdomains'] = $this->data['vhostdomains'];
+				$vhost_domains                      = array(
+					'base'     => array_values( array_unique( $base_domains ) ),
+					'wildcard' => array_values( array_unique( $widlcard_domains ) ),
+					'system'   => array_values( array_unique( $sys_domains ) ),
+				);
+				$this->data['vhostdomains']         = $vhost_domains;
+				$this->data['all_domains']          = array_merge( $vhost_domains['base'], $vhost_domains['wildcard'], $vhost_domains['system'] );
 			}
-			$this->data['orginal_vhostdomains'] = $this->data['vhostdomains'];
-			$this->data['vhostdomains']         = array(
-				'base'     => array_values( array_unique( $base_domains ) ),
-				'wildcard' => array_values( array_unique( $widlcard_domains ) ),
-			);
 			#$this->data['host_entry']           = array_values( array_unique( $hosts_entry_domains ) );
 		}
 
@@ -193,16 +230,18 @@ HTML;
 		 */
 		public function add_hosts_entry() {
 			$instance = \VSP\Laragon\Modules\Hosts\Parse::instance();
-			foreach ( $this->data['vhostdomains']['base'] as $domain ) {
-				$instance->add( array(
-					'is_disabled' => false,
-					'ip'          => '127.0.0.1',
-					'domain'      => $domain,
-					'comment'     => 'VHosts Entry',
-					'by_tool'     => true,
-				) );
+			foreach ( $this->data['all_domains'] as $domain ) {
+				if ( false === strpos( $domain, '*.' ) ) {
+					$instance->add( array(
+						'is_disabled' => false,
+						'ip'          => '127.0.0.1',
+						'domain'      => $domain,
+						'comment'     => 'VHosts Entry',
+						'by_tool'     => true,
+					) );
+				}
 			}
-			$instance->save();
+			//$instance->save();
 		}
 
 		/**
