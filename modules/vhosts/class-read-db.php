@@ -80,8 +80,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 		 * @return array|string
 		 */
 		public function domains_list( $html = true ) {
-			$vhostdomains = array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] );
-			return ( true === $html ) ? implode( '<br/>', $vhostdomains ) : $vhostdomains;
+			return ( true === $html ) ? implode( '<br/>', $this->data['all_domains'] ) : $this->data['all_domains'];
 		}
 
 		/**
@@ -181,7 +180,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 		 * @return bool
 		 */
 		public function regenerate_ssl() {
-			$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id(), array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ) );
+			$ssl = new \VSP\Laragon\Modules\SSL\Create( $this->host_id(), $this->domains_list( false ) );
 			return $ssl->generate_ssl();
 		}
 

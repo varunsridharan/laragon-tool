@@ -241,7 +241,7 @@ HTML;
 					) );
 				}
 			}
-			//$instance->save();
+			$instance->save();
 		}
 
 		/**
