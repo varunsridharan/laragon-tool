@@ -26,7 +26,6 @@ function hosts_file_checks() {
 	return $alert->alerts();
 }
 
-
 function host_db_file( $host_id ) {
 	return ABSPATH . '/db/vhosts/' . $host_id . '.json';
 }
