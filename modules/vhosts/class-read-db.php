@@ -193,32 +193,8 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 		 * @return bool
 		 */
 		public function regenerate_config( $type ) {
-			if ( 'apache' === $type ) {
-				$instance = new \VSP\Laragon\Modules\VHosts\Apache( array_merge( array(
-					'document_root' => $this->document_root(),
-					'host_id'       => $this->host_id(),
-					'ssl'           => array(
-						'key'  => $this->data['ssl']['key'],
-						'cert' => $this->data['ssl']['cert'],
-					),
-					'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-				), $this->data['apache'] ) );
-				return $instance->save_config();
-			}
-
-			if ( 'nginx' === $type ) {
-				$instance = new \VSP\Laragon\Modules\VHosts\Nginx( array_merge( array(
-					'document_root' => $this->document_root(),
-					'host_id'       => $this->host_id(),
-					'ssl'           => array(
-						'key'  => $this->data['ssl']['key'],
-						'cert' => $this->data['ssl']['cert'],
-					),
-					'domains'       => array_merge( $this->data['vhostdomains']['base'], $this->data['vhostdomains']['wildcard'] ),
-				), $this->data['nginx'] ) );
-
-				return $instance->save_config();
-			}
+			$ins = new \VSP\Laragon\Modules\VHosts\Create();
+			return $ins->regenerate( $type, $this->host_id(), $this->data );
 		}
 
 		/**
