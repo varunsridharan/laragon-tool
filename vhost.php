@@ -60,7 +60,7 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 		</div>
 	</div>
 	<br/>
-	<table class="table table-striped table-bordered table-hover">
+	<table id="vhost_lists" class="table table-borderless table-striped table-bordered table-hover">
 		<thead class="thead-dark">
 		<tr>
 			<th>Host Info</th>
@@ -68,7 +68,7 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 			<th style="width:20px;">Apache</th>
 			<th style="width:20px;">Nginx</th>
 			<th style="width:160px;">SSL Expairy</th>
-			<th style="width:150px;">Actions</th>
+			<th style="width:100px;">Actions</th>
 		</tr>
 		</thead>
 
@@ -79,8 +79,8 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 			foreach ( $files as $db ) {
 				$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( $db );
 
-
 				if ( $instance->is_readable() ) {
+					//var_dump( $instance );exit;
 					$doc_root        = $instance->document_root();
 					$doc_root_bg     = ( is_dir( $doc_root ) && ! file_exists( $doc_root ) ) ? 'table-danger' : '';
 					$doc_root_exists = ( is_dir( $doc_root ) && ! file_exists( $doc_root ) ) ? '<span class="text-danger font-weight-bolder">Document Root Not Found</span>' : '';

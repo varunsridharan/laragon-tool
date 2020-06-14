@@ -149,4 +149,7 @@ $( function() {
 			$( 'form' ).find( '.no-new' ).remove();
 		}
 	} );
+
+	$( 'table#vhost_lists' ).DataTable();
+	$( 'table#hostslisting' ).DataTable();
 } );

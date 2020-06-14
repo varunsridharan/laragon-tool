@@ -205,7 +205,7 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 				if ( $certinfo['validFrom_time_t'] > time() || $certinfo['validTo_time_t'] < time() ) {
 					return '<span class="text-danger">SSL Expaired</span>';
 				} else {
-					return '<span class="text-success">' . date( 'D d/M/Y', $certinfo['validTo_time_t'] ) . '</span>';
+					return '<span class="text-success">' . date( 'l - d/F/Y H:i:s', $certinfo['validTo_time_t'] ) . '</span>';
 				}
 			}
 			return '<span class="text-danger">SSL Certificate Does Not Exists</span>';

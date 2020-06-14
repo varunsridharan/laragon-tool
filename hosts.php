@@ -68,10 +68,10 @@ if ( is_hosts_file_readable() ) {
 		<thead class="thead-dark">
 		<tr>
 			<th scope="col" style="width:50px;">Status</th>
-			<th scope="col">Host</th>
+			<th scope="col" style="width:100px;">Host</th>
 			<th scope="col">Domains</th>
 			<th scope="col">Comments</th>
-			<th scope="col">Action</th>
+			<th scope="col" style="width:50px;">Action</th>
 		</tr>
 		</thead>
 		<tbody>
