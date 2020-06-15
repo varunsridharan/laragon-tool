@@ -12,7 +12,6 @@
 			<li class="nav-item"><a class="nav-link" href="vhost.php">Virtual Host</a></li>
 			<li class="nav-item"><a class="nav-link" href="wp-install.php">WP Install</a></li>
 			<li class="nav-item"><a class="nav-link" href="hosts.php">Hosts</a></li>
-
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="settings" data-toggle="dropdown" aria-haspopup="true"
 				   aria-expanded="false">Settings</a>
@@ -24,6 +23,8 @@
 					<a class="dropdown-item" href="settings.php#nginx_config_data">Nginx</a>
 				</div>
 			</li>
+			<li class="nav-item"><a class="nav-link text-success" href="updategithub.php">Update Github</a></li>
+
 		</ul>
 	</div>
 </nav>
