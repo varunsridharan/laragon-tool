@@ -2,7 +2,10 @@
   "scripts" : {
 	"copy_cache"  : "cp -r ./cache/ ./laragon-toolkit-data/",
 	"copy_db"     : "cp -r ./db/ ./laragon-toolkit-data/",
-	"update_git"  : "cd laragon-toolkit-data && git add * && git commit -m \"Updated\" && git push origin ",
+	"update_git"  : [
+	  "cd laragon-toolkit-data && git config --local user.email \"githubactionbot+laragon@gmail.com\" && git config --local user.name \"Laragon Bot\"",
+	  "cd laragon-toolkit-data && git add * && git commit -m \"Laragon Database Updated !\"  && git push origin "
+	],
 	"update_data" : [ "@copy_cache", "@copy_db", "@update_git" ]
   }
 }
