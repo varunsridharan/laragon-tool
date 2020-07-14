@@ -194,33 +194,33 @@ HTML;
 		 * Creates Domain Array.
 		 */
 		public function handle_domains() {
-			$base_domains     = array();
-			$widlcard_domains = array();
-			$sys_domains      = array();
-
+			$base_domains               = array();
+			$widlcard_domains           = array();
+			$sys_domains                = array();
+			$www                        = array();
 			$this->data['vhostdomains'] = ( isset( $this->data['vhostdomains']['base'] ) ) ? $this->data['vhostdomains']['base'] : $this->data['vhostdomains'];
-
+			$sysdomains                 = array( '.logs', '.log', '.err', '.error', '.acc', '.access' );
 			if ( ! isset( $this->data['vhostdomains']['base'] ) ) {
 				foreach ( $this->data['vhostdomains'] as $key => $val ) {
 					$val                                  = trim( $val );
 					$wildcard                             = ltrim( $val, '*.' );
 					$base_domains[ $val ]                 = $val;
+					$www[ 'www.' . $val ]                 = 'www.' . $val;
 					$widlcard_domains[ '*.' . $wildcard ] = '*.' . $wildcard;
-					$sys_domains[]                        = $val . '.log';
-					$sys_domains[]                        = $val . '.logs';
-					$sys_domains[]                        = $val . '.error';
-					$sys_domains[]                        = $val . '.err';
-					$sys_domains[]                        = $val . '.acc';
-					$sys_domains[]                        = $val . '.access';
+					foreach ( $sysdomains as $dom ) {
+						$sys_domains[]               = $val . $dom;
+						$www[ 'www.' . $val . $dom ] = 'www.' . $val . $dom;
+					}
 				}
 				$this->data['orginal_vhostdomains'] = $this->data['vhostdomains'];
 				$vhost_domains                      = array(
 					'base'     => array_values( array_unique( $base_domains ) ),
 					'wildcard' => array_values( array_unique( $widlcard_domains ) ),
 					'system'   => array_values( array_unique( $sys_domains ) ),
+					'www'      => array_values( array_unique( $www ) ),
 				);
 				$this->data['vhostdomains']         = $vhost_domains;
-				$this->data['all_domains']          = array_merge( $vhost_domains['base'], $vhost_domains['wildcard'], $vhost_domains['system'] );
+				$this->data['all_domains']          = array_merge( $vhost_domains['base'], $vhost_domains['wildcard'], $vhost_domains['system'], $vhost_domains['www'] );
 			}
 			#$this->data['host_entry']           = array_values( array_unique( $hosts_entry_domains ) );
 		}

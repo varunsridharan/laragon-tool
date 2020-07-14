@@ -131,6 +131,10 @@ if ( isset( $_GET['success'] ) || isset( $_GET['failed'] ) ) {
 				<h6 class="dropdown-header">Restore Config</h6>
 				<a class="dropdown-item text-danger restore-vhost-config" href="vhost-actions.php?action=restore&id={$instance->host_id()}&type=apache">Apache</a>
 				<a class="dropdown-item text-danger restore-vhost-config" href="vhost-actions.php?action=restore&id={$instance->host_id()}&type=nginx">Nginx</a>
+				<div class="dropdown-divider"></div>
+				<h6 class="dropdown-header">Re-Generate Config</h6>
+				<a class="dropdown-item text-info restore-vhost-config" href="vhost-actions.php?action=regenerate&id={$instance->host_id()}&type=apache">Apache</a>
+				<a class="dropdown-item text-info restore-vhost-config" href="vhost-actions.php?action=regenerate&id={$instance->host_id()}&type=nginx">Nginx</a>
 			</div>
 			<a type="button" class="btn btn-danger btn-sm delete-vhost" href="vhost-actions.php?action=delete&id={$instance->host_id()}">Delete</a>
 		</div>

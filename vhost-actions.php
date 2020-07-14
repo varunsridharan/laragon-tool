@@ -92,6 +92,7 @@ HTML;
 
 	if ( 'regenerate' === $action ) {
 		$files  = glob( ABSPATH . '/db/vhosts/*.json' );
+		$id     = ( isset( $_REQUEST['id'] ) ) ? $_REQUEST['id'] : false;
 		$status = array(
 			'nginx_errors'  => array(),
 			'apache_errors' => array(),
@@ -101,6 +102,9 @@ HTML;
 			foreach ( $files as $db ) {
 				$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( $db );
 				if ( $instance->is_readable() ) {
+					if ( ! empty( $id ) && $id !== $instance->host_id() ) {
+						continue;
+					}
 					if ( 'nginx' === $type ) {
 						if ( false === $instance->regenerate_config( 'nginx' ) ) {
 							$status['nginx_errors'][] = $instance->host_id();
