@@ -80,6 +80,10 @@ if ( ! class_exists( '\VSP\Laragon\Modules\VHosts\Read_DB' ) ) {
 		 * @return array|string
 		 */
 		public function domains_list( $html = true ) {
+			if ( true === $html ) {
+				$html = implode( '<br/>', $this->data['vhostdomains']['base'] );
+				return $html . ' <details class="d-block mt-3"><summary>Other Domains</summary>' . implode( '<br/>', $this->data['all_domains'] ) . '</details>';
+			}
 			return ( true === $html ) ? implode( '<br/>', $this->data['all_domains'] ) : $this->data['all_domains'];
 		}
 
