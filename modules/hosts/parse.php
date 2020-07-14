@@ -15,6 +15,14 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		 */
 		protected $hosts;
 
+		/**
+		 * @var bool
+		 */
+		protected $bulk_regenerate = true;
+
+		/**
+		 * @var null
+		 */
 		protected static $instance = null;
 
 		/**
@@ -23,9 +31,9 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		 * @static
 		 * @return \VSP\Laragon\Modules\Hosts\Parse
 		 */
-		public static function instance() {
+		public static function instance( $args = false ) {
 			if ( null === self::$instance ) {
-				self::$instance = new self();
+				self::$instance = new self( $args );
 			}
 			return self::$instance;
 		}
@@ -33,9 +41,10 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		/**
 		 * Parse constructor.
 		 */
-		public function __construct() {
+		public function __construct( $is_bulk_regenerate = false ) {
 			$contents = $this->contents();
 			$this->parse( $contents );
+			$this->bulk_regenerate = $is_bulk_regenerate;
 		}
 
 		/**
@@ -139,6 +148,9 @@ if ( ! class_exists( '\VSP\Laragon\Modules\Hosts\Parse' ) ) {
 		 *  Saves Hosts File.
 		 */
 		public function save() {
+			if ( $this->bulk_regenerate ) {
+				return true;
+			}
 			if ( is_hosts_file_readable() && is_hosts_file_writeable() ) {
 				$backup_name = 'backup-hosts-' . time();
 				copy( hosts_file_path(), ABSPATH . '/cache/hosts/' . $backup_name );
@@ -180,6 +192,16 @@ TEXT;
 				return true;
 			}
 			return false;
+		}
+
+		/**
+		 * Added Force Save Option.
+		 *
+		 * @return bool
+		 */
+		public function force_save() {
+			$this->bulk_regenerate = false;
+			return $this->save();
 		}
 
 		/**

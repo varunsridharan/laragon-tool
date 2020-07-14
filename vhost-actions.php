@@ -98,6 +98,8 @@ HTML;
 			'apache_errors' => array(),
 			'ssl_errors'    => array(),
 		);
+
+		\VSP\Laragon\Modules\Hosts\Parse::instance( true );
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $db ) {
 				$instance = new \VSP\Laragon\Modules\VHosts\Read_DB( $db );
@@ -125,6 +127,8 @@ HTML;
 				}
 			}
 		}
+
+		\VSP\Laragon\Modules\Hosts\Parse::instance( true )->force_save();
 
 		$instance = new \VSP\Laragon\Modules\Alert();
 		if ( 'ssl' === $type ) {
