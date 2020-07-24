@@ -1,5 +1,5 @@
 <?php
-define( 'ABSPATH', __DIR__ . '/' );
+define( 'ABSPATH', __DIR__ );
 define( 'SUPPORTED_PLATFORM', array( 'windows', 'linux', 'mac' ) );
 
 require ABSPATH . '/functions.php';
