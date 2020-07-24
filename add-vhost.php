@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . './config.php';
+require __DIR__ . '/config.php';
 
 if ( isset( $_POST['add_vhost'] ) ) {
 	$instance = new \VSP\Laragon\Modules\VHosts\Create();

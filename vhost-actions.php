@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . './config.php';
+require __DIR__ . '/config.php';
 if ( isset( $_REQUEST['action'] ) ) {
 	$action  = ( isset( $_REQUEST['action'] ) ) ? $_REQUEST['action'] : false;
 	$type    = ( isset( $_REQUEST['type'] ) ) ? $_REQUEST['type'] : false;

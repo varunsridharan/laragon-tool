@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . './config.php';
+require __DIR__ . '/config.php';
 
 if ( isset( $_POST['update_settings'] ) ) {
 	$instance = new \VSP\Laragon\Modules\Settings\Save();
